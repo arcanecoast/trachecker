@@ -1,0 +1,1 @@
+Application translation example (russian translation).

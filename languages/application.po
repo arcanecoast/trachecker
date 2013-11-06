@@ -1,0 +1,297 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TRAChecker\n"
+"POT-Creation-Date: 2013-11-06 18:51+0200\n"
+"PO-Revision-Date: 2013-11-06 18:55+0200\n"
+"Last-Translator: metamaker <guru@goblinov.net>\n"
+"Language-Team: metamaker <guru@goblinov.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: cppbg/tra\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: dialog_batch.cpp:26
+msgid "Path"
+msgstr "Имя файла"
+
+#: dialog_batch.cpp:27
+msgid "Error type"
+msgstr "Тип ошибки"
+
+#: dialog_batch.cpp:28
+msgid "Anchor"
+msgstr "Местоположение"
+
+#: dialog_batch.cpp:34
+msgid "Open..."
+msgstr "Открыть..."
+
+#: dialog_batch.cpp:35
+msgid "Close"
+msgstr "Закрыть"
+
+#: dialog_batch.cpp:53
+msgid ""
+"Current file has been modified. Your changes will be lost!\n"
+"Do you want to continue?"
+msgstr ""
+"Текущий файл был изменен. Ваши изменения будут утрачены!\n"
+"Вы уверены, что хотите продолжить?"
+
+#: dialog_batch.cpp:54
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: window_main.cpp:93
+msgid "TRA Checker"
+msgstr ""
+
+#: window_main.cpp:144
+msgid "&New"
+msgstr "&Новый"
+
+#: window_main.cpp:146
+msgid "&Open...\tCtrl-O"
+msgstr "&Открыть...\tCtrl-O"
+
+#: window_main.cpp:147
+msgid "Re&load\tCtrl-R"
+msgstr "Пере&загрузить\tCtrl-R"
+
+#: window_main.cpp:149
+msgid "&Save changes\tCtrl-S"
+msgstr "&Сохранить\tCtrl-S"
+
+#: window_main.cpp:150
+msgid "S&ave as...\tCtrl+Alt-S"
+msgstr "Сох&ранить как...\tCtrl+Alt-S"
+
+#: window_main.cpp:152
+msgid "E&xit"
+msgstr "В&ыход"
+
+#: window_main.cpp:155
+msgid "&Undo\tCtrl-Z"
+msgstr "&Отменить\tCtrl-Z"
+
+#: window_main.cpp:156
+msgid "&Redo\tCtrl-Y"
+msgstr "&Повторить\tCtrl-Y"
+
+#: window_main.cpp:158
+msgid "&Cut\tCtrl-X"
+msgstr "&Вырезать\tCtrl-X"
+
+#: window_main.cpp:159
+msgid "C&opy\tCtrl-C"
+msgstr "&Копировать\tCtrl-C"
+
+#: window_main.cpp:160
+msgid "&Paste\tCtrl-V"
+msgstr "В&ставить\tCtrl-V"
+
+#: window_main.cpp:162
+msgid "&Select all\tCtrl-A"
+msgstr "В&ыделить все\tCtrl-A"
+
+#: window_main.cpp:165
+msgid "&Find...\tCtrl-F"
+msgstr "&Найти...\tCtrl-F"
+
+#: window_main.cpp:167
+msgid "Find &next\tF3"
+msgstr "Поиск &вперед\tF3"
+
+#: window_main.cpp:168
+msgid "Find &prev\tF2"
+msgstr "Поиск н&азад\tF2"
+
+#: window_main.cpp:170
+msgid "&Replace\tCtrl-H"
+msgstr "&Заменить\tCtrl-H"
+
+#: window_main.cpp:173
+msgid "&Check content\tCtrl-T"
+msgstr "&Проверить текст\tCtrl-T"
+
+#: window_main.cpp:174
+msgid "Go to &mistake\tCtrl-G"
+msgstr "Перейти к &ошибке\tCtrl-G"
+
+#: window_main.cpp:176
+msgid "Automatic recheck on save"
+msgstr "Перепроверять текст при сохранении"
+
+#: window_main.cpp:178
+msgid "&Batch checking\tCtrl-B"
+msgstr "&Пакетная проверка\tCtrl-B"
+
+#: window_main.cpp:181
+msgid "&About...\tF1"
+msgstr "&О программе...\tF1"
+
+#: window_main.cpp:184
+msgid "&File"
+msgstr "&Файл"
+
+#: window_main.cpp:185
+msgid "&Edit"
+msgstr "&Правка"
+
+#: window_main.cpp:186
+msgid "&Search"
+msgstr "П&оиск"
+
+#: window_main.cpp:187
+msgid "&Checking"
+msgstr "П&роверка"
+
+#: window_main.cpp:188
+msgid "&Help"
+msgstr "&Справка"
+
+#: window_main.cpp:240
+#, c-format
+msgid "[%i:%i]: %i"
+msgstr ""
+
+#: window_main.cpp:265
+msgid "File wasn't neither saved nor checked"
+msgstr "Файл не был ни сохранен, ни проверен"
+
+#: window_main.cpp:268
+msgid "Current file: "
+msgstr "Текущий файл: "
+
+#: window_main.cpp:286
+#, c-format
+msgid "No errors, entries - %i! Last check on %s"
+msgstr "Ошибок нет, строк - %i! Последняя проверка %s"
+
+#: window_main.cpp:293
+#, c-format
+msgid "%s. Last check on %s"
+msgstr "%s. Последняя проверка %s"
+
+#: window_main.cpp:299 window_main.cpp:675
+#, c-format
+msgid "Error at %i:%i"
+msgstr "Ошибка возле %i:%i"
+
+#: window_main.cpp:360
+msgid "Unable to load request file."
+msgstr "Не удалось загрузить запрошенный файл."
+
+#: window_main.cpp:360
+msgid "Error"
+msgstr "Ошибка"
+
+#: window_main.cpp:388 window_main.cpp:407 window_main.cpp:437
+#: window_main.cpp:588 window_main.cpp:605
+msgid "No matches found!"
+msgstr "Совпадений не найдено!"
+
+#: window_main.cpp:388 window_main.cpp:407 window_main.cpp:588
+#: window_main.cpp:605
+msgid "Search finished"
+msgstr "Поиск завершен"
+
+#: window_main.cpp:437 window_main.cpp:439
+msgid "Replace finished"
+msgstr "Замена завершена"
+
+#: window_main.cpp:439
+#, c-format
+msgid "Replaced count: %i"
+msgstr "Кол. замен: %i"
+
+#: window_main.cpp:476
+msgid "Open translation file"
+msgstr "Откройте файл перевода"
+
+#: window_main.cpp:476 window_main.cpp:517 window_main.cpp:651
+msgid "WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"
+msgstr "WeiDU TRA (*.tra)|*.tra|Все файлы (*.*)|*.*"
+
+#: window_main.cpp:517
+msgid "Save translation file"
+msgstr "Сохраните файл перевода"
+
+#: window_main.cpp:574
+msgid "Search dialog"
+msgstr "Поиск"
+
+#: window_main.cpp:622
+msgid "Replace dialog"
+msgstr "Замена"
+
+#: window_main.cpp:651
+msgid "Select translation files"
+msgstr "Выберите файлы перевода"
+
+#: window_main.cpp:663
+msgid "Batch checking"
+msgstr "Пакетная проверка"
+
+#: window_main.cpp:669
+#, c-format
+msgid "File: %s"
+msgstr "Файл: %s"
+
+#: window_main.cpp:673
+msgid "No errors!"
+msgstr "Ошибок нет!"
+
+#: cppbg/tra/LogicError.h:35
+msgid "Logic error: content without @id"
+msgstr "Логическая ошибка: контент без @идентификатора"
+
+#: cppbg/tra/LogicError.h:37
+msgid "Logic error: bad @id format"
+msgstr "Логическая ошибка: некорректный формат @идентификатора"
+
+#: cppbg/tra/LogicError.h:39
+msgid "Logic error: no text section before sound specification"
+msgstr ""
+"Логическая ошибка: отсутствует текстовая секция перед определением звук. "
+"файла"
+
+#: cppbg/tra/LogicError.h:41
+msgid "Logic error: third text section detected"
+msgstr "Логическая ошибка: обнаружена третья текстовая секция"
+
+#: cppbg/tra/LogicError.h:43
+msgid "Logic error: third sound specification detected"
+msgstr "Логическая ошибка: обнаружено третье определение звук. файла"
+
+#: cppbg/tra/LogicError.h:45
+msgid "Logic error: broken link"
+msgstr "Логическая ошибка: поврежденная ссылка"
+
+#: cppbg/tra/LogicError.h:47
+msgid "Unknown logic error"
+msgstr "Неизвестная логическая ошибка"
+
+#: cppbg/tra/SyntaxError.h:33
+msgid "Syntax error: bad index"
+msgstr "Синтаксическая ошибка: некорректный индекс"
+
+#: cppbg/tra/SyntaxError.h:35
+msgid "Syntax error: unexpected symbol"
+msgstr "Синтаксическая ошибка: неожиданный символ"
+
+#: cppbg/tra/SyntaxError.h:37
+msgid "Syntax error: equaleness symbol is missing"
+msgstr "Синтаксическая ошибка: пропущен символ \"=\""
+
+#: cppbg/tra/SyntaxError.h:39
+msgid "Syntax error: unexpected end of file"
+msgstr "Синтаксическая ошибка: неожиданый конец файла"
+
+#: cppbg/tra/SyntaxError.h:41
+msgid "Unknown syntax error"
+msgstr "Неизвестная синтаксическая ошибка"
