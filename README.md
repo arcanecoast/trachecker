@@ -11,4 +11,5 @@ Features:
 
 Requirements:
  - wxWidgets 2.9.x;
- - boost (shared_ptr).
+ - boost (shared_ptr);
+ - metamaker's cppbg library (https://github.com/metamaker/cppbg).
