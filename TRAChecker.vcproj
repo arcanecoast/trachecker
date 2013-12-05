@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswud&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\include&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\boost&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL"
+				AdditionalIncludeDirectories="include;F:\PROJECTS\Projects;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswud&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\include&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\boost&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -118,8 +118,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswu&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\include&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\boost&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL"
+				AdditionalIncludeDirectories="include;F:\PROJECTS\Projects;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswu&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\wxWidgets\include&quot;;&quot;F:\PROJECTS\Libs\Trunk\C++\boost&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -178,19 +178,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\application.cpp"
+				RelativePath=".\source\application.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\dialog_about.cpp"
+				RelativePath=".\source\dialog_about.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\dialog_batch.cpp"
+				RelativePath=".\source\dialog_batch.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\window_main.cpp"
+				RelativePath=".\source\window_main.cpp"
 				>
 			</File>
 		</Filter>
@@ -200,27 +200,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\application.h"
+				RelativePath=".\include\application.h"
 				>
 			</File>
 			<File
-				RelativePath=".\binary_code_splash_png.h"
+				RelativePath=".\include\dialog_about.h"
 				>
 			</File>
 			<File
-				RelativePath=".\dialog_about.h"
+				RelativePath=".\include\dialog_batch.h"
 				>
 			</File>
 			<File
-				RelativePath=".\dialog_batch.h"
-				>
-			</File>
-			<File
-				RelativePath=".\resource.h"
-				>
-			</File>
-			<File
-				RelativePath=".\window_main.h"
+				RelativePath=".\include\window_main.h"
 				>
 			</File>
 		</Filter>
@@ -229,10 +221,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath=".\application.ico"
-				>
-			</File>
 			<File
 				RelativePath=".\common.rc"
 				>
@@ -253,91 +241,87 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\screenshots.psd"
-				>
-			</File>
-			<File
-				RelativePath=".\splash_template.png"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="tra_library"
 			>
 			<File
-				RelativePath=".\cppbg\tra\HighLevelParser.cpp"
+				RelativePath="..\cppbg\tra\HighLevelParser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\HighLevelParser.h"
+				RelativePath="..\cppbg\tra\HighLevelParser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\HighLevelParserImpl.cpp"
+				RelativePath="..\cppbg\tra\HighLevelParserImpl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\HighLevelParserImpl.h"
+				RelativePath="..\cppbg\tra\HighLevelParserImpl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\LogicError.cpp"
+				RelativePath="..\cppbg\tra\LogicError.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\LogicError.h"
+				RelativePath="..\cppbg\tra\LogicError.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\LowLevelParser.cpp"
+				RelativePath="..\cppbg\tra\LowLevelEntry.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\LowLevelParser.h"
+				RelativePath="..\cppbg\tra\LowLevelEntry.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\Position.h"
+				RelativePath="..\cppbg\tra\LowLevelParser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\SyntaxError.cpp"
+				RelativePath="..\cppbg\tra\LowLevelParser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\SyntaxError.h"
+				RelativePath="..\cppbg\tra\Position.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationEntry.cpp"
+				RelativePath="..\cppbg\tra\SyntaxError.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationEntry.h"
+				RelativePath="..\cppbg\tra\SyntaxError.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationEntryUtilities.cpp"
+				RelativePath="..\cppbg\tra\TranslationEntry.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationEntryUtilities.h"
+				RelativePath="..\cppbg\tra\TranslationEntry.h"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationException.cpp"
+				RelativePath="..\cppbg\tra\TranslationEntryUtilities.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cppbg\tra\TranslationException.h"
+				RelativePath="..\cppbg\tra\TranslationEntryUtilities.h"
+				>
+			</File>
+			<File
+				RelativePath="..\cppbg\tra\TranslationException.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\cppbg\tra\TranslationException.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\menus.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

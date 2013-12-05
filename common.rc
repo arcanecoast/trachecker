@@ -83,6 +83,9 @@ WXCURSOR_BLANK          CURSOR                  "wx/msw/blank.cur"
 WXCURSOR_RIGHT_ARROW    CURSOR                  "wx/msw/rightarr.cur"
 WXCURSOR_CROSS          CURSOR                  "wx/msw/cross.cur"
 
+
+SPLASH_ABOUT            RC_DATA                 "contrib/splash_template.png"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
@@ -90,7 +93,7 @@ WXCURSOR_CROSS          CURSOR                  "wx/msw/cross.cur"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-ICON_APP             ICON                    "application.ico"
+ICON_APP             ICON                       "contrib/application.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
