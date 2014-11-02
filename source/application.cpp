@@ -1,4 +1,5 @@
 #include <wx/file.h>
+#include <wx/stdpaths.h>
 
 #include "application.h"
 #include "window_main.h"
@@ -7,15 +8,15 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-	//if (!wxApp::OnInit()) return false;
-
-    m_isFileChecked = false;
+    m_isFileChecked  = false;
     m_isFileModified = false;
 
-    //wxInitAllImageHandlers();
     wxImage::AddHandler(new wxPNGHandler());
 
-	wxLocale::AddCatalogLookupPathPrefix("languages");
+    wxString applicationDir = wxStandardPaths::Get().GetExecutablePath();
+    applicationDir = applicationDir.substr(0, applicationDir.rfind("TRAChecker.exe"));
+
+	wxLocale::AddCatalogLookupPathPrefix(applicationDir + "languages");
     m_locale.Init(wxLocale::GetSystemLanguage(), wxLOCALE_DONT_LOAD_DEFAULT);
 	m_locale.AddCatalog("application");
 
@@ -24,13 +25,13 @@ bool MyApp::OnInit()
     switch (this->argc) {
         case 2:
             m_currentFilePath = this->argv[1];
-            break;
+        break;
         case 3:
             m_currentFilePath = this->argv[2];
             if (this->argv[1] == "--recheck") {
                 do_recheck = true;
             }
-            break;
+        break;
     }
 
     MainWindow *wndMain = new MainWindow();
