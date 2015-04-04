@@ -37,7 +37,7 @@ bool MyApp::OnInit()
     MainWindow *wndMain = new MainWindow();
 
     if (!m_currentFilePath.empty() && wxFile::Exists(m_currentFilePath)) {
-        wndMain->LoadFile(m_currentFilePath);
+        wndMain->ReadFromFile(m_currentFilePath);
 
         MainWindow_UpdateStatus(wndMain, false);
     }
@@ -79,4 +79,24 @@ void MyApp::SetFileChecked(bool value)
 void MyApp::SetFileModified(bool value)
 {
     m_isFileModified = value;
+}
+
+void MyApp::SetCurrentCodepage(const wxString& codepage)
+{
+    m_currentCodePage = codepage;
+}
+
+wxString MyApp::GetCurrentCodepage() const
+{
+    return m_currentCodePage;
+}
+
+void MyApp::SetDefaultCodepage(const wxString& codepage)
+{
+    m_defaultCodePage = codepage;
+}
+
+wxString MyApp::GetDefaultCodepage() const
+{
+    return m_defaultCodePage;
 }

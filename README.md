@@ -1,15 +1,25 @@
-TRA Checker (build 05.12.2013)
-=====================================================================
+# TRA Checker
 
 Application for checking and editing BG WeiDU's .tra files.
 For license limitations see LICENSE.md.
 
 Features:
- - Text files editing;
- - Single and batch .tra syntax checking;
- - Internationalization support.
+  - Text files editing;
+  - Single and batch .tra syntax checking;
+  - Multiple languages support (for program's user interface).
 
 Requirements:
- - wxWidgets 2.9.x;
- - boost (shared_ptr);
- - metamaker's cppbg library (https://github.com/metamaker/cppbg).
+  - wxWidgets 2.9.x;
+  - boost (shared_ptr);
+  - metamaker's cppbg library (https://github.com/metamaker/cppbg).
+ 
+### Version history
+
+04.04.2015:
+  - New features: 
+    - Export/import to .TLK
+    - UTF-8 support
+    - New parameter "DefaultCodepage" in config file which sets default encoding for file saving
+
+05.12.2013:
+  - Initial release

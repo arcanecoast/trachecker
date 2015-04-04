@@ -35,7 +35,9 @@ public:
     void RecheckFile();
     void GoToMistake();
 
-    bool LoadFile(const wxString& path);
+    bool ReadFromFile(const wxString& path);
+    void WriteToFile(const wxString& path, const wxString& encoding = "UTF-8");
+    void SaveAs(const wxString& codepage);
 
 private:
     wxTimer m_errorsHighlightingTimer;
@@ -63,7 +65,8 @@ private:
 	void MenuFileOpen(wxCommandEvent &event);
 	void MenuFileReload(wxCommandEvent &event);
 	void MenuFileSave(wxCommandEvent &event);
-	void MenuFileSaveAs(wxCommandEvent &event);
+    void MenuFileSaveAsUTF8(wxCommandEvent &event);
+    void MenuFileSaveAsCP1251(wxCommandEvent &event);
 	void MenuFileExit(wxCommandEvent &event);
 
 	void MenuEditUndo(wxCommandEvent &event);

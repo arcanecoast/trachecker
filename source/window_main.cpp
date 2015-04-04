@@ -13,6 +13,7 @@
 using cppbg_tra::HighLevelParser;
 using std::ifstream;
 using std::ofstream;
+using std::ios_base;
 
 enum
 {
@@ -20,7 +21,8 @@ enum
 	ID_FILE_OPEN,
 	ID_FILE_RELOAD,
 	ID_FILE_SAVE,
-	ID_FILE_SAVE_AS,
+    ID_FILE_SAVE_AS_UTF8,
+    ID_FILE_SAVE_AS_CP1251,
 
 	ID_EDIT_UNDO,
 	ID_EDIT_REDO,
@@ -48,12 +50,13 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_STC_CHANGE(ID_EDITOR,   MainWindow::EditorChange)
 	EVT_STC_UPDATEUI(ID_EDITOR, MainWindow::EditorStateUpdate)
 
-	EVT_MENU(ID_FILE_NEW,     MainWindow::MenuFileNew)
-	EVT_MENU(ID_FILE_OPEN,    MainWindow::MenuFileOpen)
-	EVT_MENU(ID_FILE_RELOAD,  MainWindow::MenuFileReload)
-	EVT_MENU(ID_FILE_SAVE,    MainWindow::MenuFileSave)
-	EVT_MENU(ID_FILE_SAVE_AS, MainWindow::MenuFileSaveAs)
-	EVT_MENU(wxID_EXIT,       MainWindow::MenuFileExit)
+	EVT_MENU(ID_FILE_NEW, MainWindow::MenuFileNew)
+	EVT_MENU(ID_FILE_OPEN, MainWindow::MenuFileOpen)
+	EVT_MENU(ID_FILE_RELOAD, MainWindow::MenuFileReload)
+	EVT_MENU(ID_FILE_SAVE, MainWindow::MenuFileSave)
+    EVT_MENU(ID_FILE_SAVE_AS_UTF8, MainWindow::MenuFileSaveAsUTF8)
+    EVT_MENU(ID_FILE_SAVE_AS_CP1251, MainWindow::MenuFileSaveAsCP1251)
+	EVT_MENU(wxID_EXIT, MainWindow::MenuFileExit)
 
 	EVT_MENU(ID_EDIT_UNDO,      MainWindow::MenuEditUndo)
 	EVT_MENU(ID_EDIT_REDO,      MainWindow::MenuEditRedo)
@@ -82,6 +85,12 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_TIMER(TIMER_MISTAKE_HIGHLIGHT, MainWindow::DoMistakeHighlight)
 wxEND_EVENT_TABLE()
 
+const int STATUSBAR_PANE_CARET = 0;
+const int STATUSBAR_PANE_CODEPAGE = 1;
+const int STATUSBAR_PANE_ISMODIFIED = 2;
+const int STATUSBAR_PANE_ERROR_MESSAGE = 3;
+const int STATUSBAR_PANE_FILEPATH = 4;
+
 void MainWindow_UpdateStatus(MainWindow* window, const bool &are_changes_made)
 {
     window->UpdateChangesStatus(are_changes_made);
@@ -100,7 +109,6 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 	entries[0].Set(wxACCEL_CTRL, (int)'O', ID_FILE_OPEN);
 	entries[1].Set(wxACCEL_CTRL, (int)'R', ID_FILE_RELOAD);
 	entries[2].Set(wxACCEL_CTRL, (int)'S', ID_FILE_SAVE);
-	entries[3].Set(wxACCEL_CTRL | wxACCEL_ALT, (int)'S', ID_FILE_SAVE_AS);
 	entries[4].Set(wxACCEL_NORMAL, WXK_ESCAPE, wxID_EXIT);
 	entries[5].Set(wxACCEL_CTRL, (int)'Z', ID_EDIT_UNDO);
 	entries[6].Set(wxACCEL_CTRL, (int)'Y', ID_EDIT_REDO);
@@ -143,10 +151,11 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 	menuFile->Append(ID_FILE_NEW, _("&New"));
 	menuFile->AppendSeparator();
 	menuFile->Append(ID_FILE_OPEN, _("&Open...\tCtrl-O"));
-	menuFile->Append(ID_FILE_RELOAD, _("Re&load\tCtrl-R"));
+    menuFile->Append(ID_FILE_RELOAD, _("Re&load\tCtrl-R"));
+    menuFile->Append(ID_FILE_SAVE, _("&Save changes\tCtrl-S"));
     menuFile->AppendSeparator();
-	menuFile->Append(ID_FILE_SAVE, _("&Save changes\tCtrl-S"));
-	menuFile->Append(ID_FILE_SAVE_AS, _("S&ave as...\tCtrl+Alt-S"));
+    menuFile->Append(ID_FILE_SAVE_AS_UTF8, _("S&ave as UTF-8 file..."));
+    menuFile->Append(ID_FILE_SAVE_AS_CP1251, _("S&ave as CP1251 file..."));
     menuFile->AppendSeparator();
 	menuFile->Append(wxID_EXIT, _("E&xit"));
 
@@ -188,10 +197,10 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
     SetMenuBar(menuBar);
 
-    CreateStatusBar(4, wxSTB_DEFAULT_STYLE);
+    CreateStatusBar(5, wxSTB_DEFAULT_STYLE);
 
-	int status_widths[] = {125, 10, 150, 700};
-	SetStatusWidths(4, status_widths);
+	int status_widths[] = {120, 75, 10, 150, 550};
+	SetStatusWidths(5, status_widths);
 
 	SetStatusBarPane(-1);
 
@@ -201,17 +210,21 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
     bool bAutoRecheck, bMaximized;
     int iWidth, iHeight;
+    wxString defaultCodepage;
     config.Read("AutoRecheckOnSave", &bAutoRecheck, false);
     config.Read("Width", &iWidth, 620);
     config.Read("Height", &iHeight, 440);
     config.Read("Maximized", &bMaximized, false);
+    config.Read("DefaultCodepage", &defaultCodepage, "UTF-8");
+
+    wxGetApp().SetDefaultCodepage(defaultCodepage);
+    wxGetApp().SetCurrentCodepage(defaultCodepage);
 
     SetSize(iWidth, iHeight);
     Maximize(bMaximized);
     m_autoRecheckFlag->Check(bAutoRecheck);
 
     m_textEditor->StyleSetFontEncoding(wxSTC_STYLE_DEFAULT, wxLocale::GetSystemEncoding());
-    m_textEditor->SetEOLMode(wxSTC_EOL_LF); //NOT CRLF -- wxWidgets bug (0D 0D 0A as EOL if CRLF)
 
     UpdateCaretStatus();
     UpdateFileStatus();
@@ -228,6 +241,7 @@ MainWindow::~MainWindow()
         config.Write("Height", GetSize().GetHeight());
     }
     config.Write("Maximized", IsMaximized());
+    config.Write("DefaultCodepage", wxGetApp().GetDefaultCodepage());
 }
 
 void MainWindow::UpdateCaretStatus()
@@ -242,7 +256,7 @@ void MainWindow::UpdateCaretStatus()
 		m_textEditor->GetCurrentPos() - line_start,
 		m_textEditor->GetTextLength());
 
-	SetStatusText(status, 0);
+	SetStatusText(status, STATUSBAR_PANE_CARET);
 }
 
 void MainWindow::UpdateChangesStatus(const bool &ChangesMade)
@@ -251,9 +265,9 @@ void MainWindow::UpdateChangesStatus(const bool &ChangesMade)
 	if (CurrentState == ChangesMade) return;
 
 	if (ChangesMade) {
-		SetStatusText("*", 1);
+		SetStatusText("*", STATUSBAR_PANE_ISMODIFIED);
 	} else {
-		SetStatusText(wxEmptyString, 1);
+		SetStatusText(wxEmptyString, STATUSBAR_PANE_ISMODIFIED);
 	}
 
 	CurrentState = ChangesMade;
@@ -261,13 +275,15 @@ void MainWindow::UpdateChangesStatus(const bool &ChangesMade)
 
 void MainWindow::UpdateFileStatus()
 {
+    SetStatusText("", STATUSBAR_PANE_ERROR_MESSAGE);
+
 	if (wxGetApp().GetCurrentFilePath().empty()) {
-		SetStatusText(_("File wasn't neither saved nor checked"), 3);
-        SetStatusText("", 2);
+        SetStatusText(_("File wasn't neither saved nor checked"), STATUSBAR_PANE_FILEPATH);
 	} else {
-		SetStatusText(_("Current file: ") + wxGetApp().GetCurrentFilePath(), 3);
-        SetStatusText("", 2);
-	}
+		SetStatusText(_("Current file: ") + wxGetApp().GetCurrentFilePath(), STATUSBAR_PANE_FILEPATH);
+    }
+
+    SetStatusText(wxGetApp().GetCurrentCodepage(), STATUSBAR_PANE_CODEPAGE);
 }
 
 void MainWindow::RecheckFile()
@@ -275,43 +291,53 @@ void MainWindow::RecheckFile()
     wxDateTime now(wxDateTime::Now());
     const wxString& time = now.Format("%x %X");
 
-    const wxString& text = m_textEditor->GetText();
-    const wxString& filename = wxString::Format("test_tra_file#%i.tra", abs(rand()));
+    m_textEditor->SetEOLMode(wxSTC_EOL_CRLF);
+    wxString text = m_textEditor->GetTextRaw();
 
-    ofstream output(static_cast<const wchar_t*>(filename.wc_str()));
+    if (text.empty() && !m_textEditor->GetText().empty()) {
+        wxMessageBox(_("Unable to check the file."), _("Warning"), wxOK_DEFAULT | wxOK | wxICON_WARNING, this);
+
+        return;
+    }
+
+    string filename = wxString::Format("test_tra_file#%i.tra", abs(rand()));
+
+    ofstream output(filename.c_str(), ios_base::binary | ios_base::out);
     if (!output.is_open()) {
         wxMessageBox(_("Unable to create temporary file."), _("Error"), wxOK_DEFAULT | wxOK | wxICON_ERROR, this);
+
+        return;
     } else {
-        output << static_cast<const char*>(text.c_str());
+        output.write(text.c_str(), text.length());
         output.close();
     }
 
     HighLevelParser parser;
     try {
-        parser.LoadFromFile(static_cast<const char *>(filename.c_str()));
+        parser.LoadFromFile(filename.c_str());
         SetStatusText(wxString::Format(_("No errors, entries - %i! Last check on %s"),
-            parser.GetItems().size(), time.utf8_str()), 3);
+            parser.GetItems().size(), time.utf8_str()), STATUSBAR_PANE_FILEPATH);
 
         m_latestTranslationError.reset(0);
 
-        SetStatusText("", 2);
+        SetStatusText("", STATUSBAR_PANE_ERROR_MESSAGE);
     } catch (TranslationException& e) {
         SetStatusText(wxString::Format(_("%s. Last check on %s"),
-            _(e.GetHint().c_str()), time.utf8_str()), 3);
+            _(e.GetHint().c_str()), time.utf8_str()), STATUSBAR_PANE_FILEPATH);
 
         m_latestTranslationError.reset(new TranslationException(e));
 
         if (e.GetIndexOfBadLine() != -1) {
             SetStatusText(wxString::Format(_("Error at %i:%i"), e.GetIndexOfBadLine()+1,
-                e.GetIndexOfBadCharacterInLine()), 2);
+                e.GetIndexOfBadCharacterInLine()), STATUSBAR_PANE_ERROR_MESSAGE);
 
             GoToMistake();
         } else {
-            SetStatusText("", 2);
+            SetStatusText("", STATUSBAR_PANE_ERROR_MESSAGE);
         }
     }
     
-    remove(filename);
+    remove(filename.c_str());
 
     wxGetApp().SetFileChecked(true);
 }
@@ -351,24 +377,14 @@ void MainWindow::DoMistakeHighlight(wxTimerEvent &event)
     }
 }
 
-bool MainWindow::LoadFile(const wxString& path)
+bool MainWindow::ReadFromFile(const wxString& path)
 {
-    string line, text;
+    wxConvAuto::SetFallbackEncoding(wxFONTENCODING_CP1251);
 
-    ifstream input(static_cast<const wchar_t*>(path.wc_str()));
-    if (input.is_open()) {
-        while (getline(input, line)) {
-            text += line + "\n";
-        }
-
-        input.close();
-    } else {
-        wxMessageBox(_("Unable to load request file."), _("Error"), wxOK_DEFAULT | wxOK | wxICON_ERROR, this);
-        return false;
-    }
-
-    m_textEditor->SetText(text);
+    m_textEditor->LoadFile(path);
     m_textEditor->GotoPos(0);
+
+    wxGetApp().SetCurrentCodepage(wxGetApp().GetDefaultCodepage());
 
     return true;
 }
@@ -483,7 +499,7 @@ void MainWindow::MenuFileOpen(wxCommandEvent &event)
 	if (FileDialog.ShowModal() == wxID_CANCEL) return;
 
 	wxGetApp().UpdateCurrentFilePath(FileDialog.GetPath());
-	LoadFile(wxGetApp().GetCurrentFilePath());
+	ReadFromFile(wxGetApp().GetCurrentFilePath());
 
 	MainWindow_UpdateStatus(this, false);
     wxGetApp().SetFileModified(false);
@@ -494,7 +510,7 @@ void MainWindow::MenuFileReload(wxCommandEvent &event)
 {
     if (!wxFile::Exists(wxGetApp().GetCurrentFilePath())) return;
 
-	LoadFile(wxGetApp().GetCurrentFilePath());
+	ReadFromFile(wxGetApp().GetCurrentFilePath());
 
     MainWindow_UpdateStatus(this, false);
     wxGetApp().SetFileModified(false);
@@ -504,9 +520,9 @@ void MainWindow::MenuFileReload(wxCommandEvent &event)
 void MainWindow::MenuFileSave(wxCommandEvent &event)
 {
 	if (wxGetApp().GetCurrentFilePath().empty()) {
-		MenuFileSaveAs(event);
+        MenuFileSaveAsUTF8(event);
 	} else {
-		m_textEditor->SaveFile(wxGetApp().GetCurrentFilePath());
+        WriteToFile(wxGetApp().GetCurrentFilePath(), wxGetApp().GetCurrentCodepage());
 
 		UpdateChangesStatus(false);
 		UpdateCaretStatus();
@@ -518,18 +534,13 @@ void MainWindow::MenuFileSave(wxCommandEvent &event)
 	}
 }
 
-void MainWindow::MenuFileSaveAs(wxCommandEvent &event)
+void MainWindow::MenuFileSaveAsUTF8(wxCommandEvent &event)
 {
-	wxFileDialog FileDialog(this, _("Save translation file"), "", "", _("WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-	if (FileDialog.ShowModal() == wxID_CANCEL) return;
-
-	wxGetApp().UpdateCurrentFilePath(FileDialog.GetPath());
-	m_textEditor->SaveFile(wxGetApp().GetCurrentFilePath());
-
-    MainWindow_UpdateStatus(this, false);
-    wxGetApp().SetFileModified(false);
-
-    if (m_autoRecheckFlag->IsChecked()) RecheckFile();
+    SaveAs("UTF-8");
+}
+void MainWindow::MenuFileSaveAsCP1251(wxCommandEvent &event)
+{
+    SaveAs("CP1251");
 }
 
 void MainWindow::MenuFileExit(wxCommandEvent &event)
@@ -697,4 +708,52 @@ void MainWindow::MenuHelpAbout(wxCommandEvent &event)
 
     auto_ptr<AboutDialog> wndAbout(new AboutDialog(this, splash_image));
     wndAbout->ShowModal();
+}
+
+void MainWindow::WriteToFile(const wxString& path, const wxString& encoding)
+{
+    m_textEditor->SetEOLMode(wxSTC_EOL_CRLF);
+    string text = m_textEditor->GetTextRaw();
+
+    if (encoding == "UTF-8") {
+        // Do nothing
+    } else if (encoding == "CP1251") {
+        text = wxString::FromUTF8(text.c_str());
+
+        if (text.empty() && !m_textEditor->GetText().empty()) {
+            wxMessageBox(_("Unable to convert text to CP1251. File wasn't saved!"), _("Error"), wxOK_DEFAULT | wxOK | wxICON_ERROR, this);
+
+            return;
+        }
+    }
+
+    ofstream out(static_cast<const char*>(path.c_str()), ios_base::binary | ios_base::out);
+
+    if (!out.good()) {
+        return;
+    }
+
+    out.write(text.c_str(), text.length());
+    out.close();
+}
+
+void MainWindow::SaveAs(const wxString& codepage)
+{
+    wxFileDialog FileDialog(this, _("Save translation file in ") + codepage + _(" codepage"), "", "", _("WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (FileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+
+    wxGetApp().SetCurrentCodepage(codepage);
+
+    wxGetApp().UpdateCurrentFilePath(FileDialog.GetPath());
+    WriteToFile(wxGetApp().GetCurrentFilePath(), codepage);
+
+    MainWindow_UpdateStatus(this, false);
+    wxGetApp().SetFileModified(false);
+
+    if (m_autoRecheckFlag->IsChecked()) {
+        RecheckFile();
+    }
 }

@@ -1,5 +1,8 @@
+cppbg
 Debug
 Release
 *.ncb
 *.suo
+*.sdf
+*.opensdf
 *NOTECOMP*

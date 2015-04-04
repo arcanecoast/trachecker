@@ -59,7 +59,7 @@ void BatchDialog::OpenFile(const wxString& Path)
     wndMain->SetFocus();
 
     wxGetApp().UpdateCurrentFilePath(m_directory + '\\' + Path);
-    wndMain->LoadFile(wxGetApp().GetCurrentFilePath());
+    wndMain->ReadFromFile(wxGetApp().GetCurrentFilePath());
 
     MainWindow_UpdateStatus(wndMain, false);
 
