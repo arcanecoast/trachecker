@@ -8,9 +8,12 @@
 #include "dialog_about.h"
 #include "dialog_batch.h"
 
+#include "cppbg/tlk_v1/TalkTableFile.h"
 #include "cppbg/tra/HighLevelParser.h"
 
 using cppbg_tra::HighLevelParser;
+using cppbg_tlk_v1::TalkTable;
+using cppbg_tlk_v1::TalkTableEntry;
 using std::ifstream;
 using std::ofstream;
 using std::ios_base;
@@ -39,7 +42,10 @@ enum
 	ID_CHECK_DOCHECK,
 	ID_CHECK_GOTOERROR,
 	ID_CHECK_AUTORECHK,
-	ID_CHECK_BATCH,
+    ID_CHECK_BATCH,
+
+    ID_UTILS_TO_TLK,
+    ID_UTILS_FROM_TLK,
 
 	ID_EDITOR,
 
@@ -70,9 +76,12 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 	EVT_MENU(ID_SEARCH_FINDPREV, MainWindow::MenuSearchFindPrev)
 	EVT_MENU(ID_SEARCH_REPLACE,  MainWindow::MenuSearchReplace)
 
-    EVT_MENU(ID_CHECK_DOCHECK,   MainWindow::MenuCheckDoRecheck)
+    EVT_MENU(ID_CHECK_DOCHECK, MainWindow::MenuCheckDoRecheck)
     EVT_MENU(ID_CHECK_GOTOERROR, MainWindow::MenuCheckGotoError)
-    EVT_MENU(ID_CHECK_BATCH,     MainWindow::MenuCheckBatch)
+    EVT_MENU(ID_CHECK_BATCH, MainWindow::MenuCheckBatch)
+
+    EVT_MENU(ID_UTILS_FROM_TLK, MainWindow::MenuUtilsFromTlk)
+    EVT_MENU(ID_UTILS_TO_TLK, MainWindow::MenuUtilsToTlk)
 
     EVT_MENU(wxID_ABOUT, MainWindow::MenuHelpAbout)
 
@@ -177,13 +186,17 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 	menuSearch->AppendSeparator();
 	menuSearch->Append(ID_SEARCH_REPLACE, _("&Replace\tCtrl-H"));
 
-	wxMenu *menuChecking = new wxMenu;
-	menuChecking->Append(ID_CHECK_DOCHECK, _("&Check content\tCtrl-T"));
-	menuChecking->Append(ID_CHECK_GOTOERROR, _("Go to &mistake\tCtrl-G"));
-	menuChecking->AppendSeparator();
-	m_autoRecheckFlag = menuChecking->Append(ID_CHECK_AUTORECHK, _("Automatic recheck on save"), wxEmptyString, wxITEM_CHECK);
-	menuChecking->AppendSeparator();
-	menuChecking->Append(ID_CHECK_BATCH, _("&Batch checking\tCtrl-B"));
+	wxMenu *menuCheck = new wxMenu;
+    menuCheck->Append(ID_CHECK_DOCHECK, _("&Check content\tCtrl-T"));
+    menuCheck->Append(ID_CHECK_GOTOERROR, _("Go to &mistake\tCtrl-G"));
+    menuCheck->AppendSeparator();
+    m_autoRecheckFlag = menuCheck->Append(ID_CHECK_AUTORECHK, _("Automatic recheck on save"), wxEmptyString, wxITEM_CHECK);
+    menuCheck->AppendSeparator();
+    menuCheck->Append(ID_CHECK_BATCH, _("&Batch check\tCtrl-B"));
+
+    wxMenu *menuUtils = new wxMenu;
+    menuUtils->Append(ID_UTILS_FROM_TLK, _("Import text &from BG:EE style .TLK"));
+    menuUtils->Append(ID_UTILS_TO_TLK, _("Patch text &of BG:EE style .TLK"));
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT, _("&About...\tF1"));
@@ -192,7 +205,8 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
     menuBar->Append(menuFile, _("&File"));
     menuBar->Append(menuEdit, _("&Edit"));
     menuBar->Append(menuSearch, _("&Search"));
-    menuBar->Append(menuChecking, _("&Checking"));
+    menuBar->Append(menuCheck, _("&Check"));
+    menuBar->Append(menuUtils, _("&Utils"));
     menuBar->Append(menuHelp, _("&Help"));
 
     SetMenuBar(menuBar);
@@ -286,18 +300,15 @@ void MainWindow::UpdateFileStatus()
     SetStatusText(wxGetApp().GetCurrentCodepage(), STATUSBAR_PANE_CODEPAGE);
 }
 
-void MainWindow::RecheckFile()
+wxString MainWindow::CreateTemporaryFileWithTextEditorContent()
 {
-    wxDateTime now(wxDateTime::Now());
-    const wxString& time = now.Format("%x %X");
-
     m_textEditor->SetEOLMode(wxSTC_EOL_CRLF);
     wxString text = m_textEditor->GetTextRaw();
 
     if (text.empty() && !m_textEditor->GetText().empty()) {
         wxMessageBox(_("Unable to check the file."), _("Warning"), wxOK_DEFAULT | wxOK | wxICON_WARNING, this);
 
-        return;
+        return "";
     }
 
     string filename = wxString::Format("test_tra_file#%i.tra", abs(rand()));
@@ -306,11 +317,22 @@ void MainWindow::RecheckFile()
     if (!output.is_open()) {
         wxMessageBox(_("Unable to create temporary file."), _("Error"), wxOK_DEFAULT | wxOK | wxICON_ERROR, this);
 
-        return;
+        return "";
     } else {
         output.write(text.c_str(), text.length());
         output.close();
     }
+
+    return filename;
+}
+
+bool MainWindow::RecheckFile()
+{
+    const wxString& time = wxDateTime::Now().Format("%x %X");
+
+    string filename = CreateTemporaryFileWithTextEditorContent();
+
+    bool hasNoErrors = true;
 
     HighLevelParser parser;
     try {
@@ -322,6 +344,8 @@ void MainWindow::RecheckFile()
 
         SetStatusText("", STATUSBAR_PANE_ERROR_MESSAGE);
     } catch (TranslationException& e) {
+        hasNoErrors = false;
+
         SetStatusText(wxString::Format(_("%s. Last check on %s"),
             _(e.GetHint().c_str()), time.utf8_str()), STATUSBAR_PANE_FILEPATH);
 
@@ -340,6 +364,8 @@ void MainWindow::RecheckFile()
     remove(filename.c_str());
 
     wxGetApp().SetFileChecked(true);
+
+    return hasNoErrors;
 }
 
 void MainWindow::GoToMistake()
@@ -755,5 +781,98 @@ void MainWindow::SaveAs(const wxString& codepage)
 
     if (m_autoRecheckFlag->IsChecked()) {
         RecheckFile();
+    }
+}
+
+string EscapeTranslationText(const string& text)
+{
+    string boundaryString;
+
+    bool hasTilda = text.find('~') != text.npos,
+        hasPercent = text.find('%') != text.npos,
+        hasQuote = text.find('"') != text.npos;
+
+    if (!hasTilda) {
+        boundaryString = '~';
+    } else if (!hasQuote) {
+        boundaryString = '"';
+    } else if (!hasPercent) {
+        boundaryString = '%';
+    } else {
+        boundaryString = "~~~~~";
+    }
+
+    return boundaryString + text + boundaryString;
+}
+
+wxString TLKEntryToString(const TalkTableEntry& entry, const size_t& index)
+{
+    wxString result = wxString::Format("@%i = %s", index, EscapeTranslationText(entry.GetText()));
+
+    if (!entry.GetSoundResRef().empty()) {
+        result += " [" + entry.GetSoundResRef() + "]";
+    }
+
+    return result;
+}
+
+void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
+{
+    // TODO: Give other options than just BG:EE
+
+    wxFileDialog FileDialog(this, _("Export translation to .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+
+    if (FileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+
+    // TODO: Write
+
+    TalkTable dialogTlk;
+    dialogTlk.LoadFromFile(FileDialog.GetPath());
+
+    if (!RecheckFile()) {
+        // User must fix errors before updating dialog.tlk
+
+        return;
+    }
+
+    string filename = CreateTemporaryFileWithTextEditorContent();
+
+    HighLevelParser traFile;
+    traFile.LoadFromFile(filename.c_str());
+
+    for (HighLevelParser::container_type::iterator currentEntry = traFile.GetItems().begin(), entryEnd = traFile.GetItems().end(); currentEntry != entryEnd; ++currentEntry) {
+        int index = currentEntry->first;
+
+        if (index > 0 && index < dialogTlk.GetItems().size()) {
+            dialogTlk.GetItems()[index].SetSoundResRef(currentEntry->second->GetMainSound());
+            dialogTlk.GetItems()[index].SetText(currentEntry->second->GetMainText());
+        }
+    }
+
+    dialogTlk.SaveToFile(FileDialog.GetPath());
+}
+
+void MainWindow::MenuUtilsFromTlk(wxCommandEvent &event)
+{
+    // TODO: Give other options than just BG:EE
+
+    wxFileDialog FileDialog(this, _("Import translation from .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    
+    if (FileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+
+    m_textEditor->ClearAll();
+
+    TalkTable dialogTlk;
+    dialogTlk.LoadFromFile(FileDialog.GetPath());
+
+    for (size_t currentEntryIndex = 0, entryEnd = dialogTlk.GetItems().size(); currentEntryIndex != entryEnd; ++currentEntryIndex) {
+        wxString oneLine = TLKEntryToString(dialogTlk.GetItems()[currentEntryIndex], currentEntryIndex) + '\n';
+        oneLine = wxString::FromUTF8(oneLine.c_str());
+
+        m_textEditor->AddText(oneLine);
     }
 }

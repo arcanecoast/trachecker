@@ -32,7 +32,9 @@ public:
 	void UpdateFileStatus();
 	void UpdateChangesStatus(const bool &ChangesMade = true);
 
-    void RecheckFile();
+    wxString MainWindow::CreateTemporaryFileWithTextEditorContent();
+
+    bool RecheckFile();
     void GoToMistake();
 
     bool ReadFromFile(const wxString& path);
@@ -45,9 +47,9 @@ private:
     wxFindReplaceData m_currentSearchData;
 
     auto_ptr<wxFindReplaceDialog> m_dialogSearch;
-    auto_ptr<BatchDialog>         m_dialogBatch;
-    wxStyledTextCtrl	         *m_textEditor;
-    wxMenuItem                   *m_autoRecheckFlag;
+    auto_ptr<BatchDialog> m_dialogBatch;
+    wxStyledTextCtrl *m_textEditor;
+    wxMenuItem *m_autoRecheckFlag;
 
     auto_ptr<TranslationException> m_latestTranslationError;
 
@@ -84,6 +86,9 @@ private:
     void MenuCheckDoRecheck(wxCommandEvent &event);
     void MenuCheckGotoError(wxCommandEvent &event);
     void MenuCheckBatch(wxCommandEvent &event);
+
+    void MenuUtilsToTlk(wxCommandEvent &event);
+    void MenuUtilsFromTlk(wxCommandEvent &event);
 
     void MenuHelpAbout(wxCommandEvent &event);
 
