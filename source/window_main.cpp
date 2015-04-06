@@ -8,10 +8,11 @@
 #include "dialog_about.h"
 #include "dialog_batch.h"
 
+#include "cppbg/tlk_v1/TalkTableEntry.h"
 #include "cppbg/tlk_v1/TalkTableFile.h"
-#include "cppbg/tra/HighLevelParser.h"
+#include "cppbg/tra/WeiDUModTranslation.h"
 
-using cppbg_tra::HighLevelParser;
+using cppbg_tra::WeiDUModTranslation;
 using cppbg_tlk_v1::TalkTable;
 using cppbg_tlk_v1::TalkTableEntry;
 using std::ifstream;
@@ -196,7 +197,7 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
     wxMenu *menuUtils = new wxMenu;
     menuUtils->Append(ID_UTILS_FROM_TLK, _("Import text &from BG:EE style .TLK"));
-    menuUtils->Append(ID_UTILS_TO_TLK, _("Patch text &of BG:EE style .TLK"));
+    menuUtils->Append(ID_UTILS_TO_TLK, _("&Export text of BG:EE style .TLK"));
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT, _("&About...\tF1"));
@@ -334,11 +335,11 @@ bool MainWindow::RecheckFile()
 
     bool hasNoErrors = true;
 
-    HighLevelParser parser;
+    WeiDUModTranslation parser;
     try {
         parser.LoadFromFile(filename.c_str());
         SetStatusText(wxString::Format(_("No errors, entries - %i! Last check on %s"),
-            parser.GetItems().size(), time.utf8_str()), STATUSBAR_PANE_FILEPATH);
+            parser.Size(), time.utf8_str()), STATUSBAR_PANE_FILEPATH);
 
         m_latestTranslationError.reset(0);
 
@@ -700,7 +701,7 @@ void MainWindow::MenuCheckBatch(wxCommandEvent &event)
 
     m_dialogBatch.reset(new BatchDialog(this, FileDialog.GetDirectory()));
 
-    HighLevelParser parser;
+    WeiDUModTranslation parser;
 
     int count = paths.Count();
     auto_ptr<wxProgressDialog> dlgProgress(new wxProgressDialog(_("Batch checking"),
@@ -820,16 +821,13 @@ void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
 {
     // TODO: Give other options than just BG:EE
 
-    wxFileDialog FileDialog(this, _("Export translation to .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_FILE_MUST_EXIST);
+    wxFileDialog FileDialog(this, _("Export translation to .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
     if (FileDialog.ShowModal() == wxID_CANCEL) {
         return;
     }
 
-    // TODO: Write
-
     TalkTable dialogTlk;
-    dialogTlk.LoadFromFile(FileDialog.GetPath());
 
     if (!RecheckFile()) {
         // User must fix errors before updating dialog.tlk
@@ -839,16 +837,17 @@ void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
 
     string filename = CreateTemporaryFileWithTextEditorContent();
 
-    HighLevelParser traFile;
+    WeiDUModTranslation traFile;
     traFile.LoadFromFile(filename.c_str());
 
-    for (HighLevelParser::container_type::iterator currentEntry = traFile.GetItems().begin(), entryEnd = traFile.GetItems().end(); currentEntry != entryEnd; ++currentEntry) {
+    remove(filename.c_str());
+
+    for (WeiDUModTranslation::iterator currentEntry = traFile.Begin(), entryEnd = traFile.End(); currentEntry != entryEnd; ++currentEntry) {
         int index = currentEntry->first;
 
-        if (index > 0 && index < dialogTlk.GetItems().size()) {
-            dialogTlk.GetItems()[index].SetSoundResRef(currentEntry->second->GetMainSound());
-            dialogTlk.GetItems()[index].SetText(currentEntry->second->GetMainText());
-        }
+        TalkTableEntry newEntry(7, 0, 0, currentEntry->second->GetMainSound(), currentEntry->second->GetMainText());
+
+        dialogTlk.GetItems().push_back(newEntry);
     }
 
     dialogTlk.SaveToFile(FileDialog.GetPath());

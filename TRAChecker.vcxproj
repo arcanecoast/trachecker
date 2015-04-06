@@ -95,8 +95,8 @@
   <ItemGroup>
     <ClCompile Include="cppbg\tlk_v1\TalkTableEntry.cpp" />
     <ClCompile Include="cppbg\tlk_v1\TalkTableFile.cpp" />
+    <ClCompile Include="cppbg\tra\WeiDUModTranslation.cpp" />
     <ClCompile Include="cppbg\tra\HighLevelParser.cpp" />
-    <ClCompile Include="cppbg\tra\HighLevelParserImpl.cpp" />
     <ClCompile Include="cppbg\tra\LogicError.cpp" />
     <ClCompile Include="cppbg\tra\LowLevelEntry.cpp" />
     <ClCompile Include="cppbg\tra\LowLevelParser.cpp" />
@@ -112,8 +112,8 @@
   <ItemGroup>
     <ClInclude Include="cppbg\tlk_v1\TalkTableEntry.h" />
     <ClInclude Include="cppbg\tlk_v1\TalkTableFile.h" />
+    <ClInclude Include="cppbg\tra\WeiDUModTranslation.h" />
     <ClInclude Include="cppbg\tra\HighLevelParser.h" />
-    <ClInclude Include="cppbg\tra\HighLevelParserImpl.h" />
     <ClInclude Include="cppbg\tra\LogicError.h" />
     <ClInclude Include="cppbg\tra\LowLevelEntry.h" />
     <ClInclude Include="cppbg\tra\LowLevelParser.h" />

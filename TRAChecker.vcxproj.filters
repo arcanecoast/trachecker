@@ -60,10 +60,10 @@
     <ClCompile Include="cppbg\tra\TranslationException.cpp">
       <Filter>cppbgtra</Filter>
     </ClCompile>
-    <ClCompile Include="cppbg\tra\HighLevelParser.cpp">
+    <ClCompile Include="cppbg\tra\WeiDUModTranslation.cpp">
       <Filter>cppbgtra</Filter>
     </ClCompile>
-    <ClCompile Include="cppbg\tra\HighLevelParserImpl.cpp">
+    <ClCompile Include="cppbg\tra\HighLevelParser.cpp">
       <Filter>cppbgtra</Filter>
     </ClCompile>
   </ItemGroup>
@@ -85,9 +85,6 @@
     </ClInclude>
     <ClInclude Include="cppbg\tlk_v1\TalkTableEntry.h">
       <Filter>cppbgtlk_v1</Filter>
-    </ClInclude>
-    <ClInclude Include="cppbg\tra\HighLevelParserImpl.h">
-      <Filter>cppbgtra</Filter>
     </ClInclude>
     <ClInclude Include="cppbg\tra\LogicError.h">
       <Filter>cppbgtra</Filter>
@@ -111,6 +108,9 @@
       <Filter>cppbgtra</Filter>
     </ClInclude>
     <ClInclude Include="cppbg\tra\TranslationException.h">
+      <Filter>cppbgtra</Filter>
+    </ClInclude>
+    <ClInclude Include="cppbg\tra\WeiDUModTranslation.h">
       <Filter>cppbgtra</Filter>
     </ClInclude>
     <ClInclude Include="cppbg\tra\HighLevelParser.h">
