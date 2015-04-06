@@ -26,7 +26,9 @@ class MainWindow: public wxFrame
 {
 public:
     MainWindow();
-	~MainWindow();
+    ~MainWindow();
+
+    void RegisterAccelerators();
 
 	void UpdateCaretStatus();
 	void UpdateFileStatus();

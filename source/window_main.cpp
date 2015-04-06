@@ -115,28 +115,6 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
     wxIcon icon("ICON_APP", wxICON_DEFAULT_TYPE, 16, 16);
     SetIcon(icon);
 
-	wxAcceleratorEntry entries[19];
-	entries[0].Set(wxACCEL_CTRL, (int)'O', ID_FILE_OPEN);
-	entries[1].Set(wxACCEL_CTRL, (int)'R', ID_FILE_RELOAD);
-	entries[2].Set(wxACCEL_CTRL, (int)'S', ID_FILE_SAVE);
-	entries[4].Set(wxACCEL_NORMAL, WXK_ESCAPE, wxID_EXIT);
-	entries[5].Set(wxACCEL_CTRL, (int)'Z', ID_EDIT_UNDO);
-	entries[6].Set(wxACCEL_CTRL, (int)'Y', ID_EDIT_REDO);
-	entries[7].Set(wxACCEL_CTRL, (int)'X', ID_EDIT_CUT);
-	entries[8].Set(wxACCEL_CTRL, (int)'C', ID_EDIT_COPY);
-	entries[9].Set(wxACCEL_CTRL, (int)'V', ID_EDIT_PASTE);
-	entries[10].Set(wxACCEL_CTRL, (int)'A', ID_EDIT_SELECTALL);
-	entries[11].Set(wxACCEL_CTRL, (int)'F', ID_SEARCH_FIND);
-	entries[12].Set(wxACCEL_NORMAL, WXK_F3, ID_SEARCH_FINDNEXT);
-	entries[13].Set(wxACCEL_NORMAL, WXK_F2, ID_SEARCH_FINDPREV);
-	entries[14].Set(wxACCEL_CTRL, (int)'H', ID_SEARCH_REPLACE);
-	entries[15].Set(wxACCEL_CTRL, (int)'T', ID_CHECK_DOCHECK);
-	entries[16].Set(wxACCEL_CTRL, (int)'G', ID_CHECK_GOTOERROR);
-	entries[17].Set(wxACCEL_CTRL, (int)'B', ID_CHECK_BATCH);
-	entries[18].Set(wxACCEL_NORMAL, WXK_F1, wxID_ABOUT);
-
-    wxAcceleratorTable accel(19, entries);
-
 	m_textEditor = new wxStyledTextCtrl(this, ID_EDITOR); 
 	m_textEditor->SetWrapMode(wxSTC_WRAP_WORD);
 	m_textEditor->StyleSetFontAttr(wxSTC_STYLE_DEFAULT, 10, "Courier New", false, false, false);
@@ -148,10 +126,7 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
 	m_textEditor->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
 	m_textEditor->SetMarginType(0, wxSTC_MARGIN_NUMBER);
-	m_textEditor->SetMarginWidth(0, m_textEditor->TextWidth(wxSTC_STYLE_LINENUMBER, wxT("_99999")));
-
-	m_textEditor->SetAcceleratorTable(accel);
-	SetAcceleratorTable(accel);
+    m_textEditor->SetMarginWidth(0, m_textEditor->TextWidth(wxSTC_STYLE_LINENUMBER, wxT("_99999")));
 
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxHORIZONTAL);
 	MainSizer->Add(m_textEditor, 1, wxEXPAND);
@@ -243,6 +218,8 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
     UpdateCaretStatus();
     UpdateFileStatus();
+
+    //RegisterAccelerators();
 }
 
 MainWindow::~MainWindow()
@@ -257,6 +234,33 @@ MainWindow::~MainWindow()
     }
     config.Write("Maximized", IsMaximized());
     config.Write("DefaultCodepage", wxGetApp().GetDefaultCodepage());
+}
+
+void MainWindow::RegisterAccelerators()
+{
+    wxAcceleratorEntry shortcuts[] = {
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'O', ID_FILE_OPEN),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'R', ID_FILE_RELOAD),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'S', ID_FILE_SAVE),
+        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_ESCAPE, wxID_EXIT),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'Z', ID_EDIT_UNDO),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'Y', ID_EDIT_REDO),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'X', ID_EDIT_CUT),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'C', ID_EDIT_COPY),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'V', ID_EDIT_PASTE),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'A', ID_EDIT_SELECTALL),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'F', ID_SEARCH_FIND),
+        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F3, ID_SEARCH_FINDNEXT),
+        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F2, ID_SEARCH_FINDPREV),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'H', ID_SEARCH_REPLACE),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'T', ID_CHECK_DOCHECK),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'G', ID_CHECK_GOTOERROR),
+        wxAcceleratorEntry(wxACCEL_CTRL, (int)'B', ID_CHECK_BATCH),
+        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F1, wxID_ABOUT)
+    };
+
+    wxAcceleratorTable accelatorsTable(sizeof(shortcuts), shortcuts);
+    SetAcceleratorTable(accelatorsTable);
 }
 
 void MainWindow::UpdateCaretStatus()
@@ -843,11 +847,7 @@ void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
     remove(filename.c_str());
 
     for (WeiDUModTranslation::iterator currentEntry = traFile.Begin(), entryEnd = traFile.End(); currentEntry != entryEnd; ++currentEntry) {
-        int index = currentEntry->first;
-
-        TalkTableEntry newEntry(7, 0, 0, currentEntry->second->GetMainSound(), currentEntry->second->GetMainText());
-
-        dialogTlk.GetItems().push_back(newEntry);
+        dialogTlk.GetItems().push_back(TalkTableEntry(7, 0, 0, currentEntry->second->GetMainSound(), currentEntry->second->GetMainText()));
     }
 
     dialogTlk.SaveToFile(FileDialog.GetPath());
