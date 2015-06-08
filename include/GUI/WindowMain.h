@@ -15,7 +15,7 @@
 
 #include <memory>
 
-#include "cppbg/tra/TranslationException.h"
+#include <cppbg/tra/TranslationException.h>
 
 using std::auto_ptr;
 using cppbg_tra::TranslationException;
@@ -26,9 +26,7 @@ class MainWindow: public wxFrame
 {
 public:
     MainWindow();
-    ~MainWindow();
-
-    void RegisterAccelerators();
+    ~MainWindow();    
 
 	void UpdateCaretStatus();
 	void UpdateFileStatus();
@@ -39,9 +37,12 @@ public:
     bool RecheckFile();
     void GoToMistake();
 
-    bool ReadFromFile(const wxString& path);
+    bool ReadContentFromFile(const wxString& path);
     void WriteToFile(const wxString& path, const wxString& encoding = "UTF-8");
     void SaveAs(const wxString& codepage);
+
+    bool IsAutoRecheckEnabled() const;
+    void EnableAutoRecheck(bool autoRecheck);
 
 private:
     wxTimer m_errorsHighlightingTimer;
@@ -93,6 +94,9 @@ private:
     void MenuUtilsFromTlk(wxCommandEvent &event);
 
     void MenuHelpAbout(wxCommandEvent &event);
+
+    void InitializeAccelerators();
+    void InitializeMenubar();
 
 	wxDECLARE_EVENT_TABLE();
 };

@@ -41,19 +41,19 @@
     <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+    <IntDir>bin\temp\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+    <IntDir>bin\temp\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;include;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswud;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;E:\Projects\Libs\Trunk\C++\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;vendor\cppbg\bin\include;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswud;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -63,8 +63,8 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_stc.lib;wxpngd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_stc.lib;wxpngd.lib;cppbgd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\;vendor\cppbg\bin\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -74,7 +74,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.;include;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswu;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;E:\PROJECTS\Libs\Trunk\C++\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;vendor\cppbg\bin\include;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\mswu;E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;__WXMSW__;_UNICODE;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -83,8 +83,8 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_stc.lib;wxpng.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_stc.lib;wxpng.lib;cppbg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\PROJECTS\Libs\Trunk\C++\wxWidgets\lib\vc_dll\;vendor\cppbg\bin\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -93,45 +93,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cppbg\tlk_v1\TalkTableEntry.cpp" />
-    <ClCompile Include="cppbg\tlk_v1\TalkTableFile.cpp" />
-    <ClCompile Include="cppbg\tra\WeiDUModTranslation.cpp" />
-    <ClCompile Include="cppbg\tra\HighLevelParser.cpp" />
-    <ClCompile Include="cppbg\tra\LogicError.cpp" />
-    <ClCompile Include="cppbg\tra\LowLevelEntry.cpp" />
-    <ClCompile Include="cppbg\tra\LowLevelParser.cpp" />
-    <ClCompile Include="cppbg\tra\SyntaxError.cpp" />
-    <ClCompile Include="cppbg\tra\TranslationEntry.cpp" />
-    <ClCompile Include="cppbg\tra\TranslationEntryUtilities.cpp" />
-    <ClCompile Include="cppbg\tra\TranslationException.cpp" />
-    <ClCompile Include="source\application.cpp" />
-    <ClCompile Include="source\dialog_about.cpp" />
-    <ClCompile Include="source\dialog_batch.cpp" />
-    <ClCompile Include="source\window_main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="cppbg\tlk_v1\TalkTableEntry.h" />
-    <ClInclude Include="cppbg\tlk_v1\TalkTableFile.h" />
-    <ClInclude Include="cppbg\tra\WeiDUModTranslation.h" />
-    <ClInclude Include="cppbg\tra\HighLevelParser.h" />
-    <ClInclude Include="cppbg\tra\LogicError.h" />
-    <ClInclude Include="cppbg\tra\LowLevelEntry.h" />
-    <ClInclude Include="cppbg\tra\LowLevelParser.h" />
-    <ClInclude Include="cppbg\tra\Position.h" />
-    <ClInclude Include="cppbg\tra\SyntaxError.h" />
-    <ClInclude Include="cppbg\tra\TranslationEntry.h" />
-    <ClInclude Include="cppbg\tra\TranslationEntryUtilities.h" />
-    <ClInclude Include="cppbg\tra\TranslationException.h" />
-    <ClInclude Include="include\application.h" />
-    <ClInclude Include="include\dialog_about.h" />
-    <ClInclude Include="include\dialog_batch.h" />
-    <ClInclude Include="include\window_main.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="common.rc">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\PROJECTS\Libs\Trunk\C++\wxWidgets\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\GUI\Application.cpp" />
+    <ClCompile Include="source\GUI\DialogAbout.cpp" />
+    <ClCompile Include="source\GUI\DialogBatch.cpp" />
+    <ClCompile Include="source\GUI\WindowMain.cpp" />
+    <ClCompile Include="source\Utilities\WeiDUTranslationToTalkTable.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\GUI\Application.h" />
+    <ClInclude Include="include\GUI\DialogAbout.h" />
+    <ClInclude Include="include\GUI\DialogBatch.h" />
+    <ClInclude Include="include\GUI\WindowMain.h" />
+    <ClInclude Include="include\Utilities\WeiDUTranslationToTalkTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

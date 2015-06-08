@@ -7,7 +7,9 @@
     #include <wx/wx.h>
 #endif
 
-class MyApp: public wxApp
+class MainWindow;
+
+class Application: public wxApp
 {
 public:
     virtual bool OnInit();
@@ -26,7 +28,12 @@ public:
     void SetDefaultCodepage(const wxString& codepage);
     wxString GetDefaultCodepage() const;
 
-protected:
+    void LoadConfig();
+    void SaveConfig();
+
+private:
+    MainWindow* m_windowMain;
+
 	wxLocale m_locale;
     wxString m_currentFilePath;
     wxString m_currentCodePage;
@@ -36,6 +43,6 @@ protected:
     bool m_isFileModified; // Current file is modified
 };
 
-MyApp& wxGetApp();
+Application& wxGetApp();
 
 #endif // TRACHECKER_APPLICATION

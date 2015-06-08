@@ -1,6 +1,6 @@
-#include "dialog_batch.h"
-#include "window_main.h"
-#include "application.h"
+#include <GUI/DialogBatch.h>
+#include <GUI/WindowMain.h>
+#include <GUI/Application.h>
 
 enum 
 {
@@ -59,7 +59,7 @@ void BatchDialog::OpenFile(const wxString& Path)
     wndMain->SetFocus();
 
     wxGetApp().UpdateCurrentFilePath(m_directory + '\\' + Path);
-    wndMain->ReadFromFile(wxGetApp().GetCurrentFilePath());
+    wndMain->ReadContentFromFile(wxGetApp().GetCurrentFilePath());
 
     MainWindow_UpdateStatus(wndMain, false);
 

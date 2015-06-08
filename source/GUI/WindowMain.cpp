@@ -3,14 +3,16 @@
 #include <wx/encconv.h>
 #include <wx/fileconf.h>
 
-#include "window_main.h"
-#include "application.h"
-#include "dialog_about.h"
-#include "dialog_batch.h"
+#include <GUI/WindowMain.h>
+#include <GUI/Application.h>
+#include <GUI/DialogAbout.h>
+#include <GUI/DialogBatch.h>
 
-#include "cppbg/tlk_v1/TalkTableEntry.h"
-#include "cppbg/tlk_v1/TalkTableFile.h"
-#include "cppbg/tra/WeiDUModTranslation.h"
+#include <cppbg/tlk_v1/TalkTableEntry.h>
+#include <cppbg/tlk_v1/TalkTableFile.h>
+#include <cppbg/tra/WeiDUModTranslation.h>
+
+#include <Utilities/WeiDUTranslationToTalktable.h>
 
 using cppbg_tra::WeiDUModTranslation;
 using cppbg_tlk_v1::TalkTable;
@@ -132,61 +134,6 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 	MainSizer->Add(m_textEditor, 1, wxEXPAND);
 	SetSizer(MainSizer);
 
-	wxMenu *menuFile = new wxMenu;
-	menuFile->Append(ID_FILE_NEW, _("&New"));
-	menuFile->AppendSeparator();
-	menuFile->Append(ID_FILE_OPEN, _("&Open...\tCtrl-O"));
-    menuFile->Append(ID_FILE_RELOAD, _("Re&load\tCtrl-R"));
-    menuFile->Append(ID_FILE_SAVE, _("&Save changes\tCtrl-S"));
-    menuFile->AppendSeparator();
-    menuFile->Append(ID_FILE_SAVE_AS_UTF8, _("S&ave as UTF-8 file..."));
-    menuFile->Append(ID_FILE_SAVE_AS_CP1251, _("S&ave as CP1251 file..."));
-    menuFile->AppendSeparator();
-	menuFile->Append(wxID_EXIT, _("E&xit"));
-
-	wxMenu *menuEdit = new wxMenu;
-	menuEdit->Append(ID_EDIT_UNDO, _("&Undo\tCtrl-Z"));
-	menuEdit->Append(ID_EDIT_REDO, _("&Redo\tCtrl-Y"));
-	menuEdit->AppendSeparator();
-	menuEdit->Append(ID_EDIT_CUT, _("&Cut\tCtrl-X"));
-	menuEdit->Append(ID_EDIT_COPY, _("C&opy\tCtrl-C"));
-	menuEdit->Append(ID_EDIT_PASTE, _("&Paste\tCtrl-V"));
-	menuEdit->AppendSeparator();
-	menuEdit->Append(ID_EDIT_SELECTALL, _("&Select all\tCtrl-A"));
-
-	wxMenu *menuSearch = new wxMenu;
-	menuSearch->Append(ID_SEARCH_FIND, _("&Find...\tCtrl-F"));
-	menuSearch->AppendSeparator();
-	menuSearch->Append(ID_SEARCH_FINDNEXT, _("Find &next\tF3"));
-	menuSearch->Append(ID_SEARCH_FINDPREV, _("Find &prev\tF2"));
-	menuSearch->AppendSeparator();
-	menuSearch->Append(ID_SEARCH_REPLACE, _("&Replace\tCtrl-H"));
-
-	wxMenu *menuCheck = new wxMenu;
-    menuCheck->Append(ID_CHECK_DOCHECK, _("&Check content\tCtrl-T"));
-    menuCheck->Append(ID_CHECK_GOTOERROR, _("Go to &mistake\tCtrl-G"));
-    menuCheck->AppendSeparator();
-    m_autoRecheckFlag = menuCheck->Append(ID_CHECK_AUTORECHK, _("Automatic recheck on save"), wxEmptyString, wxITEM_CHECK);
-    menuCheck->AppendSeparator();
-    menuCheck->Append(ID_CHECK_BATCH, _("&Batch check\tCtrl-B"));
-
-    wxMenu *menuUtils = new wxMenu;
-    menuUtils->Append(ID_UTILS_FROM_TLK, _("Import text &from BG:EE style .TLK"));
-    menuUtils->Append(ID_UTILS_TO_TLK, _("&Export text of BG:EE style .TLK"));
-
-    wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT, _("&About...\tF1"));
-
-    wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, _("&File"));
-    menuBar->Append(menuEdit, _("&Edit"));
-    menuBar->Append(menuSearch, _("&Search"));
-    menuBar->Append(menuCheck, _("&Check"));
-    menuBar->Append(menuUtils, _("&Utils"));
-    menuBar->Append(menuHelp, _("&Help"));
-
-    SetMenuBar(menuBar);
-
     CreateStatusBar(5, wxSTB_DEFAULT_STYLE);
 
 	int status_widths[] = {120, 75, 10, 150, 550};
@@ -194,49 +141,21 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
 	SetStatusBarPane(-1);
 
-    //-- Loading configuration
-
-    wxFileConfig config("TRA Check", "Aldark", "tracheck.ini", "tracheck.ini", wxCONFIG_USE_LOCAL_FILE);
-
-    bool bAutoRecheck, bMaximized;
-    int iWidth, iHeight;
-    wxString defaultCodepage;
-    config.Read("AutoRecheckOnSave", &bAutoRecheck, false);
-    config.Read("Width", &iWidth, 620);
-    config.Read("Height", &iHeight, 440);
-    config.Read("Maximized", &bMaximized, false);
-    config.Read("DefaultCodepage", &defaultCodepage, "UTF-8");
-
-    wxGetApp().SetDefaultCodepage(defaultCodepage);
-    wxGetApp().SetCurrentCodepage(defaultCodepage);
-
-    SetSize(iWidth, iHeight);
-    Maximize(bMaximized);
-    m_autoRecheckFlag->Check(bAutoRecheck);
+    InitializeMenubar();
+    InitializeAccelerators();
 
     m_textEditor->StyleSetFontEncoding(wxSTC_STYLE_DEFAULT, wxLocale::GetSystemEncoding());
 
     UpdateCaretStatus();
     UpdateFileStatus();
-
-    //RegisterAccelerators();
 }
 
 MainWindow::~MainWindow()
 {
-    //-- Saving configuration
-    
-    wxFileConfig config("TRA Check", "Aldark", "tracheck.ini", "tracheck.ini", wxCONFIG_USE_LOCAL_FILE);
-    config.Write("AutoRecheckOnSave", m_autoRecheckFlag->IsChecked());
-    if (!IsMaximized()) {
-        config.Write("Width", GetSize().GetWidth());
-        config.Write("Height", GetSize().GetHeight());
-    }
-    config.Write("Maximized", IsMaximized());
-    config.Write("DefaultCodepage", wxGetApp().GetDefaultCodepage());
+    wxGetApp().SaveConfig();
 }
 
-void MainWindow::RegisterAccelerators()
+void MainWindow::InitializeAccelerators()
 {
     wxAcceleratorEntry shortcuts[] = {
         wxAcceleratorEntry(wxACCEL_CTRL, (int)'O', ID_FILE_OPEN),
@@ -259,8 +178,7 @@ void MainWindow::RegisterAccelerators()
         wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F1, wxID_ABOUT)
     };
 
-    wxAcceleratorTable accelatorsTable(sizeof(shortcuts), shortcuts);
-    SetAcceleratorTable(accelatorsTable);
+    SetAcceleratorTable(wxAcceleratorTable(sizeof(shortcuts), shortcuts));
 }
 
 void MainWindow::UpdateCaretStatus()
@@ -408,7 +326,7 @@ void MainWindow::DoMistakeHighlight(wxTimerEvent &event)
     }
 }
 
-bool MainWindow::ReadFromFile(const wxString& path)
+bool MainWindow::ReadContentFromFile(const wxString& path)
 {
     wxConvAuto::SetFallbackEncoding(wxFONTENCODING_CP1251);
 
@@ -530,7 +448,7 @@ void MainWindow::MenuFileOpen(wxCommandEvent &event)
 	if (FileDialog.ShowModal() == wxID_CANCEL) return;
 
 	wxGetApp().UpdateCurrentFilePath(FileDialog.GetPath());
-	ReadFromFile(wxGetApp().GetCurrentFilePath());
+	ReadContentFromFile(wxGetApp().GetCurrentFilePath());
 
 	MainWindow_UpdateStatus(this, false);
     wxGetApp().SetFileModified(false);
@@ -541,7 +459,7 @@ void MainWindow::MenuFileReload(wxCommandEvent &event)
 {
     if (!wxFile::Exists(wxGetApp().GetCurrentFilePath())) return;
 
-	ReadFromFile(wxGetApp().GetCurrentFilePath());
+	ReadContentFromFile(wxGetApp().GetCurrentFilePath());
 
     MainWindow_UpdateStatus(this, false);
     wxGetApp().SetFileModified(false);
@@ -776,9 +694,8 @@ void MainWindow::SaveAs(const wxString& codepage)
         return;
     }
 
-    wxGetApp().SetCurrentCodepage(codepage);
-
     wxGetApp().UpdateCurrentFilePath(FileDialog.GetPath());
+    wxGetApp().SetCurrentCodepage(codepage);
     WriteToFile(wxGetApp().GetCurrentFilePath(), codepage);
 
     MainWindow_UpdateStatus(this, false);
@@ -787,38 +704,6 @@ void MainWindow::SaveAs(const wxString& codepage)
     if (m_autoRecheckFlag->IsChecked()) {
         RecheckFile();
     }
-}
-
-string EscapeTranslationText(const string& text)
-{
-    string boundaryString;
-
-    bool hasTilda = text.find('~') != text.npos,
-        hasPercent = text.find('%') != text.npos,
-        hasQuote = text.find('"') != text.npos;
-
-    if (!hasTilda) {
-        boundaryString = '~';
-    } else if (!hasQuote) {
-        boundaryString = '"';
-    } else if (!hasPercent) {
-        boundaryString = '%';
-    } else {
-        boundaryString = "~~~~~";
-    }
-
-    return boundaryString + text + boundaryString;
-}
-
-wxString TLKEntryToString(const TalkTableEntry& entry, const size_t& index)
-{
-    wxString result = wxString::Format("@%i = %s", index, EscapeTranslationText(entry.GetText()));
-
-    if (!entry.GetSoundResRef().empty()) {
-        result += " [" + entry.GetSoundResRef() + "]";
-    }
-
-    return result;
 }
 
 void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
@@ -869,9 +754,77 @@ void MainWindow::MenuUtilsFromTlk(wxCommandEvent &event)
     dialogTlk.LoadFromFile(FileDialog.GetPath());
 
     for (size_t currentEntryIndex = 0, entryEnd = dialogTlk.GetItems().size(); currentEntryIndex != entryEnd; ++currentEntryIndex) {
-        wxString oneLine = TLKEntryToString(dialogTlk.GetItems()[currentEntryIndex], currentEntryIndex) + '\n';
+        wxString oneLine = TalkTableEntryToString(dialogTlk.GetItems()[currentEntryIndex], currentEntryIndex) + '\n';
         oneLine = wxString::FromUTF8(oneLine.c_str());
 
         m_textEditor->AddText(oneLine);
     }
+}
+
+void MainWindow::InitializeMenubar()
+{
+    wxMenu *menuFile = new wxMenu;
+    menuFile->Append(ID_FILE_NEW, _("&New"));
+    menuFile->AppendSeparator();
+    menuFile->Append(ID_FILE_OPEN, _("&Open...\tCtrl+O"));
+    menuFile->Append(ID_FILE_RELOAD, _("Re&load\tCtrl+R"));
+    menuFile->Append(ID_FILE_SAVE, _("&Save changes\tCtrl+S"));
+    menuFile->AppendSeparator();
+    menuFile->Append(ID_FILE_SAVE_AS_UTF8, _("S&ave as UTF-8 file..."));
+    menuFile->Append(ID_FILE_SAVE_AS_CP1251, _("S&ave as CP1251 file..."));
+    menuFile->AppendSeparator();
+    menuFile->Append(wxID_EXIT, _("E&xit"));
+
+    wxMenu *menuEdit = new wxMenu;
+    menuEdit->Append(ID_EDIT_UNDO, _("&Undo\tCtrl+Z"));
+    menuEdit->Append(ID_EDIT_REDO, _("&Redo\tCtrl+Y"));
+    menuEdit->AppendSeparator();
+    menuEdit->Append(ID_EDIT_CUT, _("&Cut\tCtrl+X"));
+    menuEdit->Append(ID_EDIT_COPY, _("C&opy\tCtrl+C"));
+    menuEdit->Append(ID_EDIT_PASTE, _("&Paste\tCtrl+V"));
+    menuEdit->AppendSeparator();
+    menuEdit->Append(ID_EDIT_SELECTALL, _("&Select all\tCtrl+A"));
+
+    wxMenu *menuSearch = new wxMenu;
+    menuSearch->Append(ID_SEARCH_FIND, _("&Find...\tCtrl+F"));
+    menuSearch->AppendSeparator();
+    menuSearch->Append(ID_SEARCH_FINDNEXT, _("Find &next\tF3"));
+    menuSearch->Append(ID_SEARCH_FINDPREV, _("Find &prev\tF2"));
+    menuSearch->AppendSeparator();
+    menuSearch->Append(ID_SEARCH_REPLACE, _("&Replace\tCtrl+H"));
+
+    wxMenu *menuCheck = new wxMenu;
+    menuCheck->Append(ID_CHECK_DOCHECK, _("&Check content\tCtrl+T"));
+    menuCheck->Append(ID_CHECK_GOTOERROR, _("Go to &mistake\tCtrl+G"));
+    menuCheck->AppendSeparator();
+    m_autoRecheckFlag = menuCheck->Append(ID_CHECK_AUTORECHK, _("Automatic recheck on save"), wxEmptyString, wxITEM_CHECK);
+    menuCheck->AppendSeparator();
+    menuCheck->Append(ID_CHECK_BATCH, _("&Batch check\tCtrl+B"));
+
+    wxMenu *menuUtils = new wxMenu;
+    menuUtils->Append(ID_UTILS_FROM_TLK, _("Import text &from BG:EE style .TLK"));
+    menuUtils->Append(ID_UTILS_TO_TLK, _("&Export text of BG:EE style .TLK"));
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(wxID_ABOUT, _("&About...\tF1"));
+
+    wxMenuBar *menuBar = new wxMenuBar;
+    menuBar->Append(menuFile, _("&File"));
+    menuBar->Append(menuEdit, _("&Edit"));
+    menuBar->Append(menuSearch, _("&Search"));
+    menuBar->Append(menuCheck, _("&Check"));
+    menuBar->Append(menuUtils, _("&Utils"));
+    menuBar->Append(menuHelp, _("&Help"));
+
+    SetMenuBar(menuBar);
+}
+
+bool MainWindow::IsAutoRecheckEnabled() const
+{
+    return m_autoRecheckFlag->IsChecked();
+}
+
+void MainWindow::EnableAutoRecheck(bool autoRecheck)
+{
+    m_autoRecheckFlag->Check(autoRecheck);
 }

@@ -9,8 +9,7 @@ Features:
   - Multiple languages support (for program's user interface).
 
 Requirements:
-  - wxWidgets 2.9.x;
-  - boost (shared_ptr);
+  - wxWidgets 3.0.x;
   - metamaker's cppbg library (https://github.com/metamaker/cppbg).
  
 ### Version history

@@ -1,8 +1,7 @@
-cppbg
-Debug
-Release
+bin/
 *.ncb
 *.suo
 *.sdf
 *.opensdf
 *NOTECOMP*
+vendor/

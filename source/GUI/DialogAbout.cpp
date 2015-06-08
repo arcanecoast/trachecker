@@ -1,4 +1,4 @@
-#include "dialog_about.h"
+#include <GUI/DialogAbout.h>
 
 wxBEGIN_EVENT_TABLE(AboutDialog, wxDialog)
     EVT_LEFT_DOWN(AboutDialog::OnMouseClick)
