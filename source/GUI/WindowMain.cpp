@@ -708,21 +708,21 @@ void MainWindow::SaveAs(const wxString& codepage)
 
 void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
 {
+    if (!RecheckFile()) {
+        wxMessageBox(_("Please fix errors in translation file before exporting it to .TLK!"), _("Error"), wxOK | wxICON_ERROR, this);
+
+        return;
+    }
+
     // TODO: Give other options than just BG:EE
 
-    wxFileDialog FileDialog(this, _("Export translation to .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxFileDialog FileDialog(this, _("Export translation to BG:EE .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
     if (FileDialog.ShowModal() == wxID_CANCEL) {
         return;
     }
 
     TalkTable dialogTlk;
-
-    if (!RecheckFile()) {
-        // User must fix errors before updating dialog.tlk
-
-        return;
-    }
 
     string filename = CreateTemporaryFileWithTextEditorContent();
 
@@ -742,7 +742,7 @@ void MainWindow::MenuUtilsFromTlk(wxCommandEvent &event)
 {
     // TODO: Give other options than just BG:EE
 
-    wxFileDialog FileDialog(this, _("Import translation from .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog FileDialog(this, _("Import translation from BG:EE .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     
     if (FileDialog.ShowModal() == wxID_CANCEL) {
         return;

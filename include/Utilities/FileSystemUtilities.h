@@ -41,4 +41,7 @@ private:
 	void MakeTree(const std::string &Path);
 };
 
+bool HasDifferentContent(FS_Folder &folder1, FS_Folder &folder2);
+std::string CompareTranslationFilesInFolders(const char *folderPath1, const char *folderPath2);
+
 #endif //_FUNCS_FS_TREE_

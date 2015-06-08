@@ -33,6 +33,9 @@
     <ClCompile Include="source\GUI\Application.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="source\Utilities\FileSystemUtilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Utilities\WeiDUTranslationToTalkTable.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="include\GUI\DialogAbout.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utilities\FileSystemUtilities.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
