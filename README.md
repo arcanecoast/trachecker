@@ -14,11 +14,18 @@ Requirements:
  
 ### Version history
 
-04.04.2015:
-  - New features: 
-    - Export/import to .TLK
-    - UTF-8 support
-    - New parameter "DefaultCodepage" in config file which sets default encoding for file saving
+**28.06.2015:**
 
-05.12.2013:
-  - Initial release
+Enhancements: 
+  - New checks for .TRA exporting to .TLK are implemented (if .tra is empty, if .tra has non contiguous entries, if .tra first index is not 0 or 1);
+  - Application now asks if user really want to reload text file.
+    
+**04.04.2015:**
+
+New features: 
+  - Export/import to .TLK;
+  - UTF-8 support;
+  - New parameter "DefaultCodepage" in config file which sets default encoding for file saving.
+
+**05.12.2013:**
+  - Initial release.
