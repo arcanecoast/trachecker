@@ -18,9 +18,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Utilities\WeiDUTranslationToTalkTable.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="source\GUI\DialogAbout.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
@@ -36,11 +33,11 @@
     <ClCompile Include="source\Utilities\FileSystemUtilities.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="source\Utilities\WeiDUTranslationUtilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Utilities\WeiDUTranslationToTalkTable.h">
-      <Filter>Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="include\GUI\DialogBatch.h">
       <Filter>GUI</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="include\Utilities\FileSystemUtilities.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utilities\WeiDUTranslationUtilities.h">
       <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>

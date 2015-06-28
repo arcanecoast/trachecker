@@ -12,7 +12,10 @@
 #include <cppbg/tlk_v1/TalkTableFile.h>
 #include <cppbg/tra/WeiDUModTranslation.h>
 
-#include <Utilities/WeiDUTranslationToTalktable.h>
+#include <Utilities/WeiDUTranslationUtilities.h>
+
+#include <clocale>
+using namespace std;
 
 using cppbg_tra::WeiDUModTranslation;
 using cppbg_tlk_v1::TalkTable;
@@ -114,6 +117,9 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
        m_errorsHighlightingTimer(this, TIMER_MISTAKE_HIGHLIGHT), m_dialogBatch(0),
        m_dialogSearch(0), m_latestTranslationError(0)
 {
+    InitializeMenubar();
+    InitializeAccelerators();
+
     wxIcon icon("ICON_APP", wxICON_DEFAULT_TYPE, 16, 16);
     SetIcon(icon);
 
@@ -141,9 +147,6 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 
 	SetStatusBarPane(-1);
 
-    InitializeMenubar();
-    InitializeAccelerators();
-
     m_textEditor->StyleSetFontEncoding(wxSTC_STYLE_DEFAULT, wxLocale::GetSystemEncoding());
 
     UpdateCaretStatus();
@@ -153,32 +156,6 @@ MainWindow::MainWindow() : wxFrame(0, wxID_ANY, _("TRA Checker"), wxDefaultPosit
 MainWindow::~MainWindow()
 {
     wxGetApp().SaveConfig();
-}
-
-void MainWindow::InitializeAccelerators()
-{
-    wxAcceleratorEntry shortcuts[] = {
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'O', ID_FILE_OPEN),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'R', ID_FILE_RELOAD),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'S', ID_FILE_SAVE),
-        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_ESCAPE, wxID_EXIT),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'Z', ID_EDIT_UNDO),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'Y', ID_EDIT_REDO),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'X', ID_EDIT_CUT),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'C', ID_EDIT_COPY),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'V', ID_EDIT_PASTE),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'A', ID_EDIT_SELECTALL),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'F', ID_SEARCH_FIND),
-        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F3, ID_SEARCH_FINDNEXT),
-        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F2, ID_SEARCH_FINDPREV),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'H', ID_SEARCH_REPLACE),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'T', ID_CHECK_DOCHECK),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'G', ID_CHECK_GOTOERROR),
-        wxAcceleratorEntry(wxACCEL_CTRL, (int)'B', ID_CHECK_BATCH),
-        wxAcceleratorEntry(wxACCEL_NORMAL, WXK_F1, wxID_ABOUT)
-    };
-
-    SetAcceleratorTable(wxAcceleratorTable(sizeof(shortcuts), shortcuts));
 }
 
 void MainWindow::UpdateCaretStatus()
@@ -459,6 +436,10 @@ void MainWindow::MenuFileReload(wxCommandEvent &event)
 {
     if (!wxFile::Exists(wxGetApp().GetCurrentFilePath())) return;
 
+    if (wxMessageBox(_("Do you really want to reload file from drive?\nAll changes will be lost!"), _("Warning"), wxICON_WARNING | wxYES_NO, this) == wxNO) {
+        return;
+    }
+
 	ReadContentFromFile(wxGetApp().GetCurrentFilePath());
 
     MainWindow_UpdateStatus(this, false);
@@ -714,6 +695,21 @@ void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
         return;
     }
 
+    string filename = CreateTemporaryFileWithTextEditorContent();
+
+    WeiDUModTranslation traFile;
+    traFile.LoadFromFile(filename.c_str());
+
+    remove(filename.c_str());
+
+    wxString errorText = CheckWeiduTranslationToBeTLKCompatible(traFile);
+
+    if (!errorText.empty()) {
+        if (wxMessageBox(errorText + _("\nDo you want to continue?"), _("Warning"), wxICON_WARNING | wxYES_NO, this) == wxNO) {
+            return;
+        }
+    }
+
     // TODO: Give other options than just BG:EE
 
     wxFileDialog FileDialog(this, _("Export translation to BG:EE .TLK"), "", "", _("Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -723,13 +719,6 @@ void MainWindow::MenuUtilsToTlk(wxCommandEvent &event)
     }
 
     TalkTable dialogTlk;
-
-    string filename = CreateTemporaryFileWithTextEditorContent();
-
-    WeiDUModTranslation traFile;
-    traFile.LoadFromFile(filename.c_str());
-
-    remove(filename.c_str());
 
     for (WeiDUModTranslation::iterator currentEntry = traFile.Begin(), entryEnd = traFile.End(); currentEntry != entryEnd; ++currentEntry) {
         dialogTlk.GetItems().push_back(TalkTableEntry(7, 0, 0, currentEntry->second->GetMainSound(), currentEntry->second->GetMainText()));
@@ -773,7 +762,7 @@ void MainWindow::InitializeMenubar()
     menuFile->Append(ID_FILE_SAVE_AS_UTF8, _("S&ave as UTF-8 file..."));
     menuFile->Append(ID_FILE_SAVE_AS_CP1251, _("S&ave as CP1251 file..."));
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, _("E&xit"));
+    menuFile->Append(wxID_EXIT, _("E&xit\tESC"));
 
     wxMenu *menuEdit = new wxMenu;
     menuEdit->Append(ID_EDIT_UNDO, _("&Undo\tCtrl+Z"));
@@ -817,6 +806,10 @@ void MainWindow::InitializeMenubar()
     menuBar->Append(menuHelp, _("&Help"));
 
     SetMenuBar(menuBar);
+}
+
+void MainWindow::InitializeAccelerators()
+{
 }
 
 bool MainWindow::IsAutoRecheckEnabled() const

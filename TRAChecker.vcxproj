@@ -104,7 +104,7 @@
     <ClCompile Include="source\GUI\DialogBatch.cpp" />
     <ClCompile Include="source\GUI\WindowMain.cpp" />
     <ClCompile Include="source\Utilities\FileSystemUtilities.cpp" />
-    <ClCompile Include="source\Utilities\WeiDUTranslationToTalkTable.cpp" />
+    <ClCompile Include="source\Utilities\WeiDUTranslationUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GUI\Application.h" />
@@ -112,7 +112,7 @@
     <ClInclude Include="include\GUI\DialogBatch.h" />
     <ClInclude Include="include\GUI\WindowMain.h" />
     <ClInclude Include="include\Utilities\FileSystemUtilities.h" />
-    <ClInclude Include="include\Utilities\WeiDUTranslationToTalkTable.h" />
+    <ClInclude Include="include\Utilities\WeiDUTranslationUtilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

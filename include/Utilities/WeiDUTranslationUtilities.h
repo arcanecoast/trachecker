@@ -16,18 +16,22 @@
  \author metamaker
  \brief 
  
- Functions to transform WeiDU .tra to IE .tlk.
+ Functions to perform various useful operations on WeiDU .tra files
  
 ********************************************************************************************/
 
-#ifndef TRACHECKER_WEIDU_TRANSLATION_TO_TALKTABLE
-#define TRACHECKER_WEIDU_TRANSLATION_TO_TALKTABLE
+#ifndef TRACHECKER_WEIDU_TRANSLATION_UTILITIES
+#define TRACHECKER_WEIDU_TRANSLATION_UTILITIES
 
 #include <wx/string.h>
+
 #include <cppbg/tlk_v1/TalkTableEntry.h>
+#include <cppbg/tra/WeiDUModTranslation.h>
 
 using cppbg_tlk_v1::TalkTableEntry;
+using cppbg_tra::WeiDUModTranslation;
 
 wxString TalkTableEntryToString(const TalkTableEntry& entry, const size_t& index);
+wxString CheckWeiduTranslationToBeTLKCompatible(const WeiDUModTranslation& translation);
 
 #endif //TRACHECKER_WEIDU_TRANSLATION_TO_TALKTABLE
