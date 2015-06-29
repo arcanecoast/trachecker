@@ -17,9 +17,9 @@ bool Application::OnInit()
     wxString applicationDir = wxStandardPaths::Get().GetExecutablePath();
     applicationDir = applicationDir.substr(0, applicationDir.rfind("TRAChecker.exe"));
 
-	wxLocale::AddCatalogLookupPathPrefix(applicationDir + "languages");
+	wxLocale::AddCatalogLookupPathPrefix(applicationDir);
+    m_locale.AddCatalog("application");
     m_locale.Init(wxLocale::GetSystemLanguage(), wxLOCALE_DONT_LOAD_DEFAULT);
-	m_locale.AddCatalog("application");
 
     bool do_recheck = false;
 

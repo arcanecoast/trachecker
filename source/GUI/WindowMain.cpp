@@ -669,7 +669,7 @@ void MainWindow::WriteToFile(const wxString& path, const wxString& encoding)
 
 void MainWindow::SaveAs(const wxString& codepage)
 {
-    wxFileDialog FileDialog(this, _("Save translation file in ") + codepage + _(" codepage"), "", "", _("WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    wxFileDialog FileDialog(this, wxString::Format(_("Save translation file in %s codepage"), codepage), "", "", _("WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
     if (FileDialog.ShowModal() == wxID_CANCEL) {
         return;
