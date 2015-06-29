@@ -11,18 +11,23 @@ Features:
 Requirements:
   - wxWidgets 3.0.x;
   - metamaker's cppbg library (https://github.com/metamaker/cppbg).
- 
+
 ### Version history
+
+**29.06.2015:**
+
+Enhancements:
+  - Russian translation is now included in TraChecker release.
 
 **28.06.2015:**
 
-Enhancements: 
+Enhancements:
   - New checks for .TRA exporting to .TLK are implemented (if .tra is empty, if .tra has non contiguous entries, if .tra first index is not 0 or 1);
   - Application now asks if user really want to reload text file.
-    
+
 **04.04.2015:**
 
-New features: 
+New features:
   - Export/import to .TLK;
   - UTF-8 support;
   - New parameter "DefaultCodepage" in config file which sets default encoding for file saving.
