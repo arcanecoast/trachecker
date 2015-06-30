@@ -31,7 +31,7 @@ bool Application::OnInit()
 
     CurrentConfiguration().Load();
 
-    m_currentFileInfo.SetCodepage(CurrentConfiguration().GetDefaultCodepage());
+    CurrentFileInfo().SetCodepage(CurrentConfiguration().GetDefaultCodepage());
 
     // Create main window
 
@@ -46,19 +46,19 @@ bool Application::OnInit()
     bool doRecheck = false;
 
     if (this->argc == 2) {
-        m_currentFileInfo.SetPath(this->argv[1]);
+        CurrentFileInfo().SetPath(this->argv[1]);
     } else if (this->argc == 3) {
         if (this->argv[1] == "--recheck") {
             doRecheck = true;
         }
 
-        m_currentFileInfo.SetPath(this->argv[2]);
+        CurrentFileInfo().SetPath(this->argv[2]);
     }
 
     // Use command line parameters
 
-    if (!m_currentFileInfo.GetPath().empty() && wxFile::Exists(m_currentFileInfo.GetPath())) {
-        TranslationFileActions::LoadTranslationFromFile(m_currentFileInfo.GetPath(), m_mainWindow->GetTextEditor());
+    if (!CurrentFileInfo().GetPath().empty() && wxFile::Exists(CurrentFileInfo().GetPath())) {
+        TranslationFileActions::LoadTranslationFromFile(CurrentFileInfo().GetPath(), m_mainWindow->GetTextEditor());
 
         m_mainWindow->RefreshAllStatusBarInfo();
     }
