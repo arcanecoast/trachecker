@@ -7,40 +7,34 @@
     #include <wx/wx.h>
 #endif
 
-class MainWindow;
+#include <memory>
+
+#include <Utilities/TranslationFileInfo.h>
+#include <Utilities/Configuration.h>
+
+#include <cppbg/tra/Position.h>
+
+using std::auto_ptr;
+using cppbg_tra::Position;
 
 class Application: public wxApp
 {
 public:
     virtual bool OnInit();
+    virtual int OnExit();
 
-    wxString GetCurrentFilePath() const;
-    void UpdateCurrentFilePath(const wxString& path);
+    TranslationFileInfo& CurrentFileInfo();
+    Configuration& CurrentConfiguration();
 
-    bool IsFileChecked() const;
-    bool IsFileModified() const;
-    void SetFileChecked(bool value);
-    void SetFileModified(bool value);
-
-    void SetCurrentCodepage(const wxString& codepage);
-    wxString GetCurrentCodepage() const;
-
-    void SetDefaultCodepage(const wxString& codepage);
-    wxString GetDefaultCodepage() const;
-
-    void LoadConfig();
-    void SaveConfig();
+    Position& LatestTranslationErrorPosition();
+    wxString& LatestTranslationErrorHint();
 
 private:
-    MainWindow* m_windowMain;
+    TranslationFileInfo m_currentFileInfo;
+    Configuration m_currentConfiguration;
 
-	wxLocale m_locale;
-    wxString m_currentFilePath;
-    wxString m_currentCodePage;
-    wxString m_defaultCodePage;
-
-    bool m_isFileChecked;  // Current file is checked with TRA HighLevelParser
-    bool m_isFileModified; // Current file is modified
+    Position m_latestTranslationErrorPosition;
+    wxString m_latestTranslationErrorHint;
 };
 
 Application& wxGetApp();

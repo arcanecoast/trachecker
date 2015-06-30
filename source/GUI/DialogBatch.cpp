@@ -2,6 +2,8 @@
 #include <GUI/WindowMain.h>
 #include <GUI/Application.h>
 
+#include <Utilities/TranslationFileActions.h>
+
 enum 
 {
     ID_OPEN = 2000,
@@ -17,7 +19,7 @@ wxBEGIN_EVENT_TABLE(BatchDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 BatchDialog::BatchDialog(MainWindow *parent, const wxString& directory) :
-    wxDialog(parent, wxID_ANY, "Batch checking [" + directory + "]",
+    wxDialog(parent, wxID_ANY, wxString::Format(_("Batch checking [%s]"), directory),
         wxDefaultPosition, wxSize(600, 400),
         wxCAPTION | wxCLOSE_BOX | wxSYSTEM_MENU | wxRESIZE_BORDER),
     m_directory(directory)
@@ -31,8 +33,8 @@ BatchDialog::BatchDialog(MainWindow *parent, const wxString& directory) :
     mainSizer->Add(m_listFiles, 1, wxEXPAND | wxALL, 2);
 
     wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
-    buttonsSizer->Add(new wxButton(this, ID_OPEN, _("Open..."), wxDefaultPosition, wxSize(100, 25)), 0, wxALIGN_RIGHT | wxRIGHT, 3);
-    buttonsSizer->Add(new wxButton(this, ID_CANCEL, _("Close"), wxDefaultPosition, wxSize(100, 25)), 0, wxALIGN_RIGHT | wxRIGHT, 2);
+    buttonsSizer->Add(new wxButton(this, ID_OPEN, _("Open..."), wxDefaultPosition, wxSize(100, 25)), 0, wxLEFT, 3);
+    buttonsSizer->Add(new wxButton(this, ID_CANCEL, _("Close"), wxDefaultPosition, wxSize(100, 25)), 0, wxLEFT, 2);
     mainSizer->Add(buttonsSizer, 0, wxALIGN_RIGHT | wxALL, 2);
 
     SetSizer(mainSizer);
@@ -49,21 +51,20 @@ void BatchDialog::OpenFile(const wxString& Path)
 {
     MainWindow *wndMain = dynamic_cast<MainWindow *>(this->GetParent());
 
-    if (wxGetApp().IsFileModified()) {
+    if (wxGetApp().CurrentFileInfo().GetModified()) {
         if (wxMessageBox(_("Current file has been modified. Your changes will be lost!\nDo you want to continue?"),
-            _("Warning"), wxCENTRE | wxYES_NO | wxICON_WARNING, wndMain) == wxNO) {
+                _("Warning"), wxCENTRE | wxYES_NO | wxICON_WARNING, wndMain) == wxNO) {
             return;
         }
     }
 
+    wxGetApp().CurrentFileInfo().SetPath(m_directory + '\\' + Path);
+    TranslationFileActions::LoadTranslationFromFile(wxGetApp().CurrentFileInfo().GetPath(), wndMain->GetTextEditor());
+
+    wxGetApp().CurrentFileInfo().SetModified(false);
+
     wndMain->SetFocus();
-
-    wxGetApp().UpdateCurrentFilePath(m_directory + '\\' + Path);
-    wndMain->ReadContentFromFile(wxGetApp().GetCurrentFilePath());
-
-    MainWindow_UpdateStatus(wndMain, false);
-
-    wndMain->RecheckFile();
+    wndMain->RecheckCurrentTranslation();
 }
 
 void BatchDialog::ClearFilesList()

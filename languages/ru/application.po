@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TraChecker\n"
-"POT-Creation-Date: 2015-06-29 19:55+0300\n"
-"PO-Revision-Date: 2015-06-29 20:17+0300\n"
+"POT-Creation-Date: 2015-06-30 18:38+0300\n"
+"PO-Revision-Date: 2015-06-30 18:38+0300\n"
 "Last-Translator: \n"
 "Language-Team: metamaker <guru@goblinov.net>\n"
 "Language: ru_RU\n"
@@ -10,33 +10,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.2\n"
-"X-Poedit-Basepath: ..\n"
+"X-Poedit-Basepath: ../..\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: source/GUI/DialogBatch.cpp:26
+#: source/GUI/DialogBatch.cpp:22
+#, c-format
+msgid "Batch checking [%s]"
+msgstr "Пакетная проверка [%s]"
+
+#: source/GUI/DialogBatch.cpp:28
 msgid "Path"
 msgstr "Имя файла"
 
-#: source/GUI/DialogBatch.cpp:27
+#: source/GUI/DialogBatch.cpp:29
 msgid "Error type"
 msgstr "Тип ошибки"
 
-#: source/GUI/DialogBatch.cpp:28
+#: source/GUI/DialogBatch.cpp:30
 msgid "Anchor"
 msgstr "Местоположение"
 
-#: source/GUI/DialogBatch.cpp:34
+#: source/GUI/DialogBatch.cpp:36
 msgid "Open..."
 msgstr "Открыть..."
 
-#: source/GUI/DialogBatch.cpp:35
+#: source/GUI/DialogBatch.cpp:37
 msgid "Close"
 msgstr "Закрыть"
 
-#: source/GUI/DialogBatch.cpp:53
+#: source/GUI/DialogBatch.cpp:55
 msgid ""
 "Current file has been modified. Your changes will be lost!\n"
 "Do you want to continue?"
@@ -44,86 +49,74 @@ msgstr ""
 "Текущий файл был изменен. Ваши изменения будут утрачены!\n"
 "Вы уверены, что хотите продолжить?"
 
-#: source/GUI/DialogBatch.cpp:54 source/GUI/WindowMain.cpp:209
-#: source/GUI/WindowMain.cpp:439 source/GUI/WindowMain.cpp:708
+#: source/GUI/DialogBatch.cpp:56 source/GUI/WindowMain.cpp:431
+#: source/GUI/WindowMain.cpp:684
+#: source/Utilities/TranslationFileActions.cpp:57
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: source/GUI/WindowMain.cpp:116
+#: source/GUI/WindowMain.cpp:108
 msgid "TRA Checker"
 msgstr ""
 
-#: source/GUI/WindowMain.cpp:168
+#: source/GUI/WindowMain.cpp:174
 #, c-format
 msgid "[%i:%i]: %i"
 msgstr ""
 
-#: source/GUI/WindowMain.cpp:195
-msgid "File wasn't neither saved nor checked"
-msgstr "Файл не был ни сохранен, ни проверен"
-
-#: source/GUI/WindowMain.cpp:197
-msgid "Current file: "
-msgstr "Текущий файл: "
-
-#: source/GUI/WindowMain.cpp:209
-msgid "Unable to check the file."
-msgstr "Не удалось проверить файл."
-
-#: source/GUI/WindowMain.cpp:218
-msgid "Unable to create temporary file."
-msgstr "Не удалось создать временный файл."
-
-#: source/GUI/WindowMain.cpp:218 source/GUI/WindowMain.cpp:654
-#: source/GUI/WindowMain.cpp:693
-msgid "Error"
-msgstr "Ошибка"
-
-#: source/GUI/WindowMain.cpp:240
-#, c-format
-msgid "No errors, entries - %i! Last check on %s"
-msgstr "Ошибок нет, строк - %i! Последняя проверка %s"
-
-#: source/GUI/WindowMain.cpp:249
-#, c-format
-msgid "%s. Last check on %s"
-msgstr "%s. Последняя проверка %s"
-
-#: source/GUI/WindowMain.cpp:255 source/GUI/WindowMain.cpp:622
+#: source/GUI/WindowMain.cpp:197 source/GUI/WindowMain.cpp:623
 #, c-format
 msgid "Error at %i:%i"
 msgstr "Ошибка возле %i:%i"
 
-#: source/GUI/WindowMain.cpp:336 source/GUI/WindowMain.cpp:355
-#: source/GUI/WindowMain.cpp:385 source/GUI/WindowMain.cpp:535
+#: source/GUI/WindowMain.cpp:212
+msgid "File wasn't neither saved nor checked"
+msgstr "Файл не был ни сохранен, ни проверен"
+
+#: source/GUI/WindowMain.cpp:214
+msgid "Current file: "
+msgstr "Текущий файл: "
+
+#: source/GUI/WindowMain.cpp:235
+#, c-format
+msgid "No errors, entries - %i! Last check on %s"
+msgstr "Ошибок нет, строк - %i! Последняя проверка %s"
+
+#: source/GUI/WindowMain.cpp:245
+#, c-format
+msgid "%s. Last check on %s"
+msgstr "%s. Последняя проверка %s"
+
+#: source/GUI/WindowMain.cpp:318 source/GUI/WindowMain.cpp:337
+#: source/GUI/WindowMain.cpp:367 source/GUI/WindowMain.cpp:532
 #: source/GUI/WindowMain.cpp:552
 msgid "No matches found!"
 msgstr "Совпадений не найдено!"
 
-#: source/GUI/WindowMain.cpp:336 source/GUI/WindowMain.cpp:355
-#: source/GUI/WindowMain.cpp:535 source/GUI/WindowMain.cpp:552
+#: source/GUI/WindowMain.cpp:318 source/GUI/WindowMain.cpp:337
+#: source/GUI/WindowMain.cpp:532 source/GUI/WindowMain.cpp:552
 msgid "Search finished"
 msgstr "Поиск завершен"
 
-#: source/GUI/WindowMain.cpp:385 source/GUI/WindowMain.cpp:387
+#: source/GUI/WindowMain.cpp:367 source/GUI/WindowMain.cpp:369
 msgid "Replace finished"
 msgstr "Замена завершена"
 
-#: source/GUI/WindowMain.cpp:387
+#: source/GUI/WindowMain.cpp:369
 #, c-format
 msgid "Replaced count: %i"
 msgstr "Кол. замен: %i"
 
-#: source/GUI/WindowMain.cpp:424
+#: source/GUI/WindowMain.cpp:412
 msgid "Open translation file"
 msgstr "Открытие файл перевода"
 
-#: source/GUI/WindowMain.cpp:424 source/GUI/WindowMain.cpp:598
-#: source/GUI/WindowMain.cpp:672
+#: source/GUI/WindowMain.cpp:412 source/GUI/WindowMain.cpp:598
+#: source/GUI/WindowMain.cpp:648
 msgid "WeiDU TRA (*.tra)|*.tra|All files (*.*)|*.*"
 msgstr "WeiDU TRA (*.tra)|*.tra|Все файлы (*.*)|*.*"
 
-#: source/GUI/WindowMain.cpp:439
+#: source/GUI/WindowMain.cpp:431
 msgid ""
 "Do you really want to reload file from drive?\n"
 "All changes will be lost!"
@@ -131,7 +124,7 @@ msgstr ""
 "Вы действительно хотите перезагрузить файл с диска?\n"
 "Все текущие изменения будут потеряны!"
 
-#: source/GUI/WindowMain.cpp:521
+#: source/GUI/WindowMain.cpp:518
 msgid "Search dialog"
 msgstr "Поиск"
 
@@ -156,22 +149,24 @@ msgstr "Файл: %s"
 msgid "No errors!"
 msgstr "Ошибок нет!"
 
-#: source/GUI/WindowMain.cpp:654
-msgid "Unable to convert text to CP1251. File wasn't saved!"
-msgstr "Не удается преобразовать текст в CP1251. Файл не был сохранен!"
-
-#: source/GUI/WindowMain.cpp:672
+#: source/GUI/WindowMain.cpp:648
 #, c-format
 msgid "Save translation file in %s codepage"
 msgstr "Сохранение файла перевода в кодировке %s"
 
-#: source/GUI/WindowMain.cpp:693
+#: source/GUI/WindowMain.cpp:670
 msgid "Please fix errors in translation file before exporting it to .TLK!"
 msgstr ""
 "Пожалуйста, исправьте ошибки в файле перевода прежде чем экспортировать его "
 "в .TLK!"
 
-#: source/GUI/WindowMain.cpp:708
+#: source/GUI/WindowMain.cpp:670
+#: source/Utilities/TranslationFileActions.cpp:35
+#: source/Utilities/TranslationFileActions.cpp:66
+msgid "Error"
+msgstr "Ошибка"
+
+#: source/GUI/WindowMain.cpp:684
 msgid ""
 "\n"
 "Do you want to continue?"
@@ -179,137 +174,149 @@ msgstr ""
 "\n"
 "Вы действительно хотите продолжить?"
 
-#: source/GUI/WindowMain.cpp:715
+#: source/GUI/WindowMain.cpp:691
 msgid "Export translation to BG:EE .TLK"
 msgstr "Экспорт перевода в BG:EE .TLK"
 
-#: source/GUI/WindowMain.cpp:715 source/GUI/WindowMain.cpp:734
+#: source/GUI/WindowMain.cpp:691 source/GUI/WindowMain.cpp:710
 msgid "Talktable file (*.tlk)|*.tlk|All files (*.*)|*.*"
 msgstr "Внутриигровой перевод (*.tlk)|*.tlk|Все файлы (*.*)|*.*"
 
-#: source/GUI/WindowMain.cpp:734
+#: source/GUI/WindowMain.cpp:710
 msgid "Import translation from BG:EE .TLK"
 msgstr "Импорт перевода из BG:EE .TLK"
 
-#: source/GUI/WindowMain.cpp:756
+#: source/GUI/WindowMain.cpp:732
 msgid "&New"
 msgstr "&Новый"
 
-#: source/GUI/WindowMain.cpp:758
+#: source/GUI/WindowMain.cpp:734
 msgid "&Open...\tCtrl+O"
 msgstr "&Открыть...\tCtrl+O"
 
-#: source/GUI/WindowMain.cpp:759
+#: source/GUI/WindowMain.cpp:735
 msgid "Re&load\tCtrl+R"
 msgstr "Пере&загрузить\tCtrl+R"
 
-#: source/GUI/WindowMain.cpp:760
+#: source/GUI/WindowMain.cpp:736
 msgid "&Save changes\tCtrl+S"
 msgstr "&Сохранить\tCtrl+S"
 
-#: source/GUI/WindowMain.cpp:762
+#: source/GUI/WindowMain.cpp:738
 msgid "S&ave as UTF-8 file..."
 msgstr "Сох&ранить как файл в UTF-8..."
 
-#: source/GUI/WindowMain.cpp:763
+#: source/GUI/WindowMain.cpp:739
 msgid "S&ave as CP1251 file..."
 msgstr "Сох&ранить как файл в CP1251..."
 
-#: source/GUI/WindowMain.cpp:765
+#: source/GUI/WindowMain.cpp:741
 msgid "E&xit\tESC"
 msgstr "В&ыход\tESC"
 
-#: source/GUI/WindowMain.cpp:768
+#: source/GUI/WindowMain.cpp:744
 msgid "&Undo\tCtrl+Z"
 msgstr "&Отменить\tCtrl+Z"
 
-#: source/GUI/WindowMain.cpp:769
+#: source/GUI/WindowMain.cpp:745
 msgid "&Redo\tCtrl+Y"
 msgstr "&Повторить\tCtrl+Y"
 
-#: source/GUI/WindowMain.cpp:771
+#: source/GUI/WindowMain.cpp:747
 msgid "&Cut\tCtrl+X"
 msgstr "&Вырезать\tCtrl+X"
 
-#: source/GUI/WindowMain.cpp:772
+#: source/GUI/WindowMain.cpp:748
 msgid "C&opy\tCtrl+C"
 msgstr "&Копировать\tCtrl+C"
 
-#: source/GUI/WindowMain.cpp:773
+#: source/GUI/WindowMain.cpp:749
 msgid "&Paste\tCtrl+V"
 msgstr "В&ставить\tCtrl+V"
 
-#: source/GUI/WindowMain.cpp:775
+#: source/GUI/WindowMain.cpp:751
 msgid "&Select all\tCtrl+A"
 msgstr "В&ыделить все\tCtrl+A"
 
-#: source/GUI/WindowMain.cpp:778
+#: source/GUI/WindowMain.cpp:754
 msgid "&Find...\tCtrl+F"
 msgstr "&Найти...\tCtrl+F"
 
-#: source/GUI/WindowMain.cpp:780
+#: source/GUI/WindowMain.cpp:756
 msgid "Find &next\tF3"
 msgstr "Поиск &вперед\tF3"
 
-#: source/GUI/WindowMain.cpp:781
+#: source/GUI/WindowMain.cpp:757
 msgid "Find &prev\tF2"
 msgstr "Поиск н&азад\tF2"
 
-#: source/GUI/WindowMain.cpp:783
+#: source/GUI/WindowMain.cpp:759
 msgid "&Replace\tCtrl+H"
 msgstr "&Заменить\tCtrl+H"
 
-#: source/GUI/WindowMain.cpp:786
+#: source/GUI/WindowMain.cpp:762
 msgid "&Check content\tCtrl+T"
 msgstr "&Проверить текст\tCtrl+T"
 
-#: source/GUI/WindowMain.cpp:787
+#: source/GUI/WindowMain.cpp:763
 msgid "Go to &mistake\tCtrl+G"
 msgstr "Перейти к &ошибке\tCtrl+G"
 
-#: source/GUI/WindowMain.cpp:789
+#: source/GUI/WindowMain.cpp:765
 msgid "Automatic recheck on save"
 msgstr "Перепроверять текст при сохранении"
 
-#: source/GUI/WindowMain.cpp:791
+#: source/GUI/WindowMain.cpp:767
 msgid "&Batch check\tCtrl+B"
 msgstr "&Пакетная проверка\tCtrl+B"
 
-#: source/GUI/WindowMain.cpp:794
+#: source/GUI/WindowMain.cpp:770
 msgid "Import text &from BG:EE style .TLK"
 msgstr "&Импорт текста из BG:EE .TLK"
 
-#: source/GUI/WindowMain.cpp:795
+#: source/GUI/WindowMain.cpp:771
 msgid "&Export text of BG:EE style .TLK"
 msgstr "&Экспорт текста в BG:EE .TLK"
 
-#: source/GUI/WindowMain.cpp:798
+#: source/GUI/WindowMain.cpp:774
 msgid "&About...\tF1"
 msgstr "&О программе...\tF1"
 
-#: source/GUI/WindowMain.cpp:801
+#: source/GUI/WindowMain.cpp:777
 msgid "&File"
 msgstr "&Файл"
 
-#: source/GUI/WindowMain.cpp:802
+#: source/GUI/WindowMain.cpp:778
 msgid "&Edit"
 msgstr "&Правка"
 
-#: source/GUI/WindowMain.cpp:803
+#: source/GUI/WindowMain.cpp:779
 msgid "&Search"
 msgstr "П&оиск"
 
-#: source/GUI/WindowMain.cpp:804
+#: source/GUI/WindowMain.cpp:780
 msgid "&Check"
 msgstr "П&роверка"
 
-#: source/GUI/WindowMain.cpp:805
+#: source/GUI/WindowMain.cpp:781
 msgid "&Utils"
 msgstr "&Инструменты"
 
-#: source/GUI/WindowMain.cpp:806
+#: source/GUI/WindowMain.cpp:782
 msgid "&Help"
 msgstr "&Справка"
+
+#: source/Utilities/TranslationFileActions.cpp:35
+msgid "Unable to convert text to CP1251. File wasn't saved!"
+msgstr "Не удается преобразовать текст в CP1251. Файл не был сохранен!"
+
+#: source/Utilities/TranslationFileActions.cpp:57
+msgid "Unable to check the file."
+msgstr "Не удалось проверить файл."
+
+#: source/Utilities/TranslationFileActions.cpp:66
+msgid "Unable to create temporary file."
+msgstr "Не удалось создать временный файл."
 
 #: source/Utilities/WeiDUTranslationUtilities.cpp:24
 msgid "- Translation file is empty.\n"
@@ -318,8 +325,8 @@ msgstr "- Файл перевода пуст.\n"
 #: source/Utilities/WeiDUTranslationUtilities.cpp:32
 #, c-format
 msgid ""
-"- Translation file's first entry must have @0 or @1 index but first index is @"
-"%i.\n"
+"- Translation file's first entry must have @0 or @1 index but first index is "
+"@%i.\n"
 msgstr ""
 "- Первая запись в файле перевода должна начинаться с индекса @0 или @1, а "
 "начинается с @%i.\n"
@@ -331,57 +338,47 @@ msgstr ""
 "- Файл перевода содержит записи с непоследовательно идущими индексами (@%i, @"
 "%i).\n"
 
-#: cppbg/tra/LogicError.h:35
-msgid "Logic error: content without @id"
-msgstr "Логическая ошибка: контент без @идентификатора"
+#~ msgid "Logic error: content without @id"
+#~ msgstr "Логическая ошибка: контент без @идентификатора"
 
-#: cppbg/tra/LogicError.h:37
-msgid "Logic error: bad @id format"
-msgstr "Логическая ошибка: некорректный формат @идентификатора"
+#~ msgid "Logic error: bad @id format"
+#~ msgstr "Логическая ошибка: некорректный формат @идентификатора"
 
-#: cppbg/tra/LogicError.h:39
-msgid "Logic error: no text section before sound specification"
-msgstr ""
-"Логическая ошибка: отсутствует текстовая секция перед определением звук. файла"
+#~ msgid "Logic error: no text section before sound specification"
+#~ msgstr ""
+#~ "Логическая ошибка: отсутствует текстовая секция перед определением звук. "
+#~ "файла"
 
-#: cppbg/tra/LogicError.h:41
-msgid "Logic error: third text section detected"
-msgstr "Логическая ошибка: обнаружена третья текстовая секция"
+#~ msgid "Logic error: third text section detected"
+#~ msgstr "Логическая ошибка: обнаружена третья текстовая секция"
 
-#: cppbg/tra/LogicError.h:43
-msgid "Logic error: third sound specification detected"
-msgstr "Логическая ошибка: обнаружено третье определение звук. файла"
+#~ msgid "Logic error: third sound specification detected"
+#~ msgstr "Логическая ошибка: обнаружено третье определение звук. файла"
 
-#: cppbg/tra/LogicError.h:45
-msgid "Logic error: broken link"
-msgstr "Логическая ошибка: поврежденная ссылка"
+#~ msgid "Logic error: broken link"
+#~ msgstr "Логическая ошибка: поврежденная ссылка"
 
-msgid "Logic error: cycle of references found"
-msgstr "Логическая ошибка: обнаружено зацикливание ссылок"
+#~ msgid "Logic error: cycle of references found"
+#~ msgstr "Логическая ошибка: обнаружено зацикливание ссылок"
 
-msgid "Logic error: entry with such id is already defined"
-msgstr "Логическая ошибка: такой же идентификатор записи встречается второй раз"
+#~ msgid "Logic error: entry with such id is already defined"
+#~ msgstr ""
+#~ "Логическая ошибка: такой же идентификатор записи встречается второй раз"
 
-#: cppbg/tra/LogicError.h:47
-msgid "Unknown logic error"
-msgstr "Неизвестная логическая ошибка"
+#~ msgid "Unknown logic error"
+#~ msgstr "Неизвестная логическая ошибка"
 
-#: cppbg/tra/SyntaxError.h:33
-msgid "Syntax error: bad index"
-msgstr "Синтаксическая ошибка: некорректный индекс"
+#~ msgid "Syntax error: bad index"
+#~ msgstr "Синтаксическая ошибка: некорректный индекс"
 
-#: cppbg/tra/SyntaxError.h:35
-msgid "Syntax error: unexpected symbol"
-msgstr "Синтаксическая ошибка: неожиданный символ"
+#~ msgid "Syntax error: unexpected symbol"
+#~ msgstr "Синтаксическая ошибка: неожиданный символ"
 
-#: cppbg/tra/SyntaxError.h:37
-msgid "Syntax error: equaleness symbol is missing"
-msgstr "Синтаксическая ошибка: пропущен символ \"=\""
+#~ msgid "Syntax error: equaleness symbol is missing"
+#~ msgstr "Синтаксическая ошибка: пропущен символ \"=\""
 
-#: cppbg/tra/SyntaxError.h:39
-msgid "Syntax error: unexpected end of file"
-msgstr "Синтаксическая ошибка: неожиданый конец файла"
+#~ msgid "Syntax error: unexpected end of file"
+#~ msgstr "Синтаксическая ошибка: неожиданый конец файла"
 
-#: cppbg/tra/SyntaxError.h:41
-msgid "Unknown syntax error"
-msgstr "Неизвестная синтаксическая ошибка"
+#~ msgid "Unknown syntax error"
+#~ msgstr "Неизвестная синтаксическая ошибка"

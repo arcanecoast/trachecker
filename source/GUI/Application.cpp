@@ -1,138 +1,101 @@
 #include <wx/file.h>
 #include <wx/stdpaths.h>
-#include <wx/fileconf.h>
 
 #include <GUI/Application.h>
 #include <GUI/WindowMain.h>
+
+#include <Utilities/TranslationFileActions.h>
 
 wxIMPLEMENT_APP(Application);
 
 bool Application::OnInit()
 {
-    m_isFileChecked  = false;
-    m_isFileModified = false;
+    static wxLocale defaultLocale;
+
+    // Initialize libpng for wxWidgets
 
     wxImage::AddHandler(new wxPNGHandler());
+
+    // Get current executable directory
 
     wxString applicationDir = wxStandardPaths::Get().GetExecutablePath();
     applicationDir = applicationDir.substr(0, applicationDir.rfind("TRAChecker.exe"));
 
+    // Initialize localization
+
 	wxLocale::AddCatalogLookupPathPrefix(applicationDir);
-    m_locale.AddCatalog("application");
-    m_locale.Init(wxLocale::GetSystemLanguage(), wxLOCALE_DONT_LOAD_DEFAULT);
+    defaultLocale.AddCatalog("application");
+    defaultLocale.Init(wxLocale::GetSystemLanguage(), wxLOCALE_LOAD_DEFAULT);
 
-    bool do_recheck = false;
+    // Load and apply configuration
 
-    switch (this->argc) {
-        case 2:
-            m_currentFilePath = this->argv[1];
-        break;
-        case 3:
-            m_currentFilePath = this->argv[2];
-            if (this->argv[1] == "--recheck") {
-                do_recheck = true;
-            }
-        break;
+    CurrentConfiguration().Load();
+
+    m_currentFileInfo.SetCodepage(CurrentConfiguration().GetDefaultCodepage());
+
+    // Create main window
+
+    MainWindow* m_mainWindow = new MainWindow();
+
+    m_mainWindow->SetSize(CurrentConfiguration().GetWidth(), CurrentConfiguration().GetHeight());
+    m_mainWindow->Maximize(CurrentConfiguration().GetMaximized());
+    m_mainWindow->SetAutoRecheck(CurrentConfiguration().GetAutoRecheckOnSave());
+
+    // Read command line parameters
+
+    bool doRecheck = false;
+
+    if (this->argc == 2) {
+        m_currentFileInfo.SetPath(this->argv[1]);
+    } else if (this->argc == 3) {
+        if (this->argv[1] == "--recheck") {
+            doRecheck = true;
+        }
+
+        m_currentFileInfo.SetPath(this->argv[2]);
     }
 
-    m_windowMain = new MainWindow();
+    // Use command line parameters
 
-    if (!m_currentFilePath.empty() && wxFile::Exists(m_currentFilePath)) {
-        m_windowMain->ReadContentFromFile(m_currentFilePath);
+    if (!m_currentFileInfo.GetPath().empty() && wxFile::Exists(m_currentFileInfo.GetPath())) {
+        TranslationFileActions::LoadTranslationFromFile(m_currentFileInfo.GetPath(), m_mainWindow->GetTextEditor());
 
-        MainWindow_UpdateStatus(m_windowMain, false);
+        m_mainWindow->RefreshAllStatusBarInfo();
     }
-
-    LoadConfig();
     
-    m_windowMain->Show(true);
+    m_mainWindow->Show(true);
 
-    if (do_recheck) {
-        m_windowMain->RecheckFile();
+    if (doRecheck) {
+        m_mainWindow->RecheckCurrentTranslation();
     }
 
     return true;
 }
 
-wxString Application::GetCurrentFilePath() const
+int Application::OnExit()
 {
-    return m_currentFilePath;
+    CurrentConfiguration().Save();
+
+    return wxApp::OnExit();
 }
 
-void Application::UpdateCurrentFilePath(const wxString& path)
+TranslationFileInfo& Application::CurrentFileInfo()
 {
-    m_currentFilePath = path;
+    return m_currentFileInfo;
 }
 
-bool Application::IsFileChecked() const
+Configuration& Application::CurrentConfiguration()
 {
-    return m_isFileChecked;
+    return m_currentConfiguration;
 }
 
-bool Application::IsFileModified() const
+Position& Application::LatestTranslationErrorPosition()
 {
-    return m_isFileModified;
+    return m_latestTranslationErrorPosition;
 }
 
-void Application::SetFileChecked(bool value)
+wxString& Application::LatestTranslationErrorHint()
 {
-    m_isFileChecked = value;
+    return m_latestTranslationErrorHint;
 }
 
-void Application::SetFileModified(bool value)
-{
-    m_isFileModified = value;
-}
-
-void Application::SetCurrentCodepage(const wxString& codepage)
-{
-    m_currentCodePage = codepage;
-}
-
-wxString Application::GetCurrentCodepage() const
-{
-    return m_currentCodePage;
-}
-
-void Application::SetDefaultCodepage(const wxString& codepage)
-{
-    m_defaultCodePage = codepage;
-}
-
-wxString Application::GetDefaultCodepage() const
-{
-    return m_defaultCodePage;
-}
-
-void Application::LoadConfig()
-{
-    wxFileConfig config("TRA Check", "Aldark", "tracheck.ini", "tracheck.ini", wxCONFIG_USE_LOCAL_FILE);
-
-    bool bAutoRecheck, bMaximized;
-    int iWidth, iHeight;
-    wxString defaultCodepage;
-    config.Read("AutoRecheckOnSave", &bAutoRecheck, false);
-    config.Read("Width", &iWidth, 620);
-    config.Read("Height", &iHeight, 440);
-    config.Read("Maximized", &bMaximized, false);
-    config.Read("DefaultCodepage", &defaultCodepage, "UTF-8");
-
-    SetDefaultCodepage(defaultCodepage);
-    SetCurrentCodepage(defaultCodepage);
-
-    m_windowMain->SetSize(iWidth, iHeight);
-    m_windowMain->Maximize(bMaximized);
-    m_windowMain->EnableAutoRecheck(bAutoRecheck);
-}
-
-void Application::SaveConfig()
-{
-    wxFileConfig config("TRA Check", "Aldark", "tracheck.ini", "tracheck.ini", wxCONFIG_USE_LOCAL_FILE);
-    config.Write("AutoRecheckOnSave", m_windowMain->IsAutoRecheckEnabled());
-    if (!m_windowMain->IsMaximized()) {
-        config.Write("Width", m_windowMain->GetSize().GetWidth());
-        config.Write("Height", m_windowMain->GetSize().GetHeight());
-    }
-    config.Write("Maximized", m_windowMain->IsMaximized());
-    config.Write("DefaultCodepage", GetDefaultCodepage());
-}

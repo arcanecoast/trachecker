@@ -9,55 +9,62 @@
 
 #include <wx/stc/stc.h>
 #include <wx/fdrepdlg.h>
-#include <wx/mstream.h>
-#include <wx/progdlg.h>
 #include <wx/timer.h>
 
 #include <memory>
 
-#include <cppbg/tra/TranslationException.h>
-
 using std::auto_ptr;
-using cppbg_tra::TranslationException;
 
 class BatchDialog;
+class TranslationFileInfo;
 
 class MainWindow: public wxFrame
 {
 public:
     MainWindow();
-    ~MainWindow();    
+    ~MainWindow();
 
-	void UpdateCaretStatus();
-	void UpdateFileStatus();
-	void UpdateChangesStatus(const bool &ChangesMade = true);
+    void RefreshAllStatusBarInfo();
 
-    wxString MainWindow::CreateTemporaryFileWithTextEditorContent();
+    void RefreshStatusBarCaretInfo();
+    void RefreshStatusBarFileInfo();
+    void RefreshStatusBarChangesMarker();
 
-    bool RecheckFile();
-    void GoToMistake();
+    bool RecheckCurrentTranslation();
+    void MoveCursorToError();
 
-    bool ReadContentFromFile(const wxString& path);
-    void WriteToFile(const wxString& path, const wxString& encoding = "UTF-8");
-    void SaveAs(const wxString& codepage);
+    bool GetAutoRecheck() const;
+    wxStyledTextCtrl* GetTextEditor();
+    TranslationFileInfo& CurrentTranslationFileInfo();
 
-    bool IsAutoRecheckEnabled() const;
-    void EnableAutoRecheck(bool autoRecheck);
+    void SetAutoRecheck(bool autoRecheck);
 
 private:
-    wxTimer m_errorsHighlightingTimer;
+    wxStyledTextCtrl* m_textEditor;
+    wxMenuItem* m_autoRecheckFlag;
+
+    wxTimer m_timerErrorHighlight;
 
     wxFindReplaceData m_currentSearchData;
-
     auto_ptr<wxFindReplaceDialog> m_dialogSearch;
-    auto_ptr<BatchDialog> m_dialogBatch;
-    wxStyledTextCtrl *m_textEditor;
-    wxMenuItem *m_autoRecheckFlag;
 
-    auto_ptr<TranslationException> m_latestTranslationError;
+    auto_ptr<BatchDialog> m_dialogBatch;
+
+    static const int STATUSBAR_PANE_CARET;
+    static const int STATUSBAR_PANE_CODEPAGE;
+    static const int STATUSBAR_PANE_ISMODIFIED;
+    static const int STATUSBAR_PANE_ERROR_MESSAGE;
+    static const int STATUSBAR_PANE_FILEPATH;
+
+    static const wxColor EDITOR_ACTIVE_LINE_BACKGROUND;
+    static const wxColor EDITOR_ERROR_LINE_BACKGROUND;
 
 private:
-    void DoMistakeHighlight(wxTimerEvent &event);
+    wxDECLARE_EVENT_TABLE();
+
+    void SaveAs(const wxString& codepage);
+
+    void OnTimerHighlightError(wxTimerEvent &event);
 
 	void EditorFind(wxFindDialogEvent& event);
 	void EditorReplace(wxFindDialogEvent& event);
@@ -97,10 +104,6 @@ private:
 
     void InitializeAccelerators();
     void InitializeMenubar();
-
-	wxDECLARE_EVENT_TABLE();
 };
-
-void MainWindow_UpdateStatus(MainWindow* window, const bool &are_changes_made = true);
 
 #endif //TRACHECKER_MAINWINDOW

@@ -36,6 +36,15 @@
     <ClCompile Include="source\Utilities\WeiDUTranslationUtilities.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="source\Utilities\TranslationFileActions.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utilities\Configuration.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utilities\TranslationFileInfo.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GUI\DialogBatch.h">
@@ -54,6 +63,15 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="include\Utilities\WeiDUTranslationUtilities.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utilities\TranslationFileActions.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utilities\TranslationFileInfo.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utilities\Configuration.h">
       <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
