@@ -387,8 +387,6 @@ void MainWindow::EditorChange(wxStyledTextEvent &event)
 
 void MainWindow::EditorStateUpdate(wxStyledTextEvent &event)
 {
-    m_timerErrorHighlight.Stop();
-
 	RefreshStatusBarCaretInfo();
 }
 
@@ -786,7 +784,7 @@ void MainWindow::InitializeMenubar()
 
 void MainWindow::InitializeAccelerators()
 {
-    // Do nothing yet
+    // Do nothing
 }
 
 bool MainWindow::GetAutoRecheck() const
