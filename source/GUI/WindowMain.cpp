@@ -6,6 +6,7 @@
 #include <GUI/Application.h>
 #include <GUI/DialogAbout.h>
 #include <GUI/DialogBatch.h>
+#include <GUI/DialogCompareFolders.h>
 
 #include <cppbg/tlk_v1/TalkTableEntry.h>
 #include <cppbg/tlk_v1/TalkTableFile.h>
@@ -48,6 +49,7 @@ enum
 
     ID_UTILS_TO_TLK,
     ID_UTILS_FROM_TLK,
+	ID_UTILS_COMPARE_FOLDERS,
 
 	ID_EDITOR,
 
@@ -84,6 +86,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 
     EVT_MENU(ID_UTILS_FROM_TLK, MainWindow::MenuUtilsFromTlk)
     EVT_MENU(ID_UTILS_TO_TLK, MainWindow::MenuUtilsToTlk)
+	EVT_MENU(ID_UTILS_COMPARE_FOLDERS, MainWindow::MenuUtilsCompareFolders)
 
     EVT_MENU(wxID_ABOUT, MainWindow::MenuHelpAbout)
 
@@ -724,6 +727,12 @@ void MainWindow::MenuUtilsFromTlk(wxCommandEvent &event)
     }
 }
 
+void MainWindow::MenuUtilsCompareFolders(wxCommandEvent &event)
+{
+	CompareFoldersDialog dlgCompareFolders(this);
+	dlgCompareFolders.ShowModal();
+}
+
 void MainWindow::InitializeMenubar()
 {
     wxMenu *menuFile = new wxMenu;
@@ -767,6 +776,8 @@ void MainWindow::InitializeMenubar()
     wxMenu *menuUtils = new wxMenu;
     menuUtils->Append(ID_UTILS_FROM_TLK, _("Import text &from BG:EE style .TLK"));
     menuUtils->Append(ID_UTILS_TO_TLK, _("&Export text of BG:EE style .TLK"));
+	menuUtils->AppendSeparator();
+	menuUtils->Append(ID_UTILS_COMPARE_FOLDERS, _("&Compare folders with translations"));
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT, _("&About...\tF1"));

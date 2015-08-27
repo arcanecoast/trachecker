@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -102,6 +102,7 @@
     <ClCompile Include="source\GUI\Application.cpp" />
     <ClCompile Include="source\GUI\DialogAbout.cpp" />
     <ClCompile Include="source\GUI\DialogBatch.cpp" />
+    <ClCompile Include="source\GUI\DialogCompareFolders.cpp" />
     <ClCompile Include="source\GUI\WindowMain.cpp" />
     <ClCompile Include="source\Utilities\Configuration.cpp" />
     <ClCompile Include="source\Utilities\FileSystemUtilities.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="include\GUI\Application.h" />
     <ClInclude Include="include\GUI\DialogAbout.h" />
     <ClInclude Include="include\GUI\DialogBatch.h" />
+    <ClInclude Include="include\GUI\DialogCompareFolders.h" />
     <ClInclude Include="include\GUI\WindowMain.h" />
     <ClInclude Include="include\Utilities\Configuration.h" />
     <ClInclude Include="include\Utilities\FileSystemUtilities.h" />

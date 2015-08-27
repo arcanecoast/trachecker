@@ -45,6 +45,9 @@
     <ClCompile Include="source\Utilities\TranslationFileInfo.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="source\GUI\DialogCompareFolders.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GUI\DialogBatch.h">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="include\Utilities\Configuration.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\DialogCompareFolders.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

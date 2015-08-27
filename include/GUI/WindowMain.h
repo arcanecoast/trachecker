@@ -99,6 +99,7 @@ private:
 
     void MenuUtilsToTlk(wxCommandEvent &event);
     void MenuUtilsFromTlk(wxCommandEvent &event);
+	void MenuUtilsCompareFolders(wxCommandEvent &event);
 
     void MenuHelpAbout(wxCommandEvent &event);
 
